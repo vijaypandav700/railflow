@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from railflow import __version__
+from railflow.detector import detect
 from railflow.planfile import PlanFileError, load_plan_file
 from railflow.validator import Json, validate
 
@@ -30,6 +31,9 @@ def main(argv: list[str] | None = None) -> int:
     validate_cmd = commands.add_parser("validate", help="validate a plan file")
     validate_cmd.add_argument("file", type=Path)
     validate_cmd.add_argument("--json", action="store_true", dest="as_json")
+    detect_cmd = commands.add_parser("detect", help="list conflicts in a plan file")
+    detect_cmd.add_argument("file", type=Path)
+    detect_cmd.add_argument("--json", action="store_true", dest="as_json")
     args = parser.parse_args(argv)
 
     try:
@@ -37,6 +41,17 @@ def main(argv: list[str] | None = None) -> int:
     except PlanFileError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
+    if args.command == "detect":
+        conflicts = detect(data)
+        if args.as_json:
+            print(json.dumps(conflicts, indent=2))
+        else:
+            for c in conflicts:
+                print(
+                    f"{c['type']:<18}{c['platform']:<5}{', '.join(c['trains'])}  {c['minutes']} min"
+                )
+            print(f"{len(conflicts)} conflict(s)")
+        return 1 if conflicts else 0
     result = validate(data)
     print(json.dumps(result, indent=2) if args.as_json else _render(result))
     return 0 if result["valid"] else 1
