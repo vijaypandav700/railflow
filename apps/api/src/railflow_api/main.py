@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any, cast
 
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
 from railflow import __version__
 from railflow.audit import AuditLog
 from railflow.benchmark import compare
@@ -188,3 +189,9 @@ def api_scenario(scenario_id: str) -> dict[str, Any]:
         )
     data = load_plan_file(path)
     return {k: data[k] for k in ("station", "trains", "closures", "delays", "now")}
+
+
+# Serve the built web app when RAILFLOW_WEB_DIR is set (single-image deploy). Keep this last.
+_web_dir = os.environ.get("RAILFLOW_WEB_DIR")
+if _web_dir and Path(_web_dir).is_dir():
+    app.mount("/", StaticFiles(directory=_web_dir, html=True), name="web")
