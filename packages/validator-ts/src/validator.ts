@@ -116,7 +116,7 @@ function deferredRows(d: Input, closure: Closure): Row[] {
 		(r) =>
 			r.platform === closure.platform &&
 			frozen.has(r.train_id) &&
-			r.arr < closure.start &&
+			r.arr < closure.end &&
 			r.dep + buffer > closure.start,
 	);
 }
