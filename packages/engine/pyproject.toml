@@ -12,3 +12,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/railflow"]
+
+[project.scripts]
+railflow = "railflow.cli:main"

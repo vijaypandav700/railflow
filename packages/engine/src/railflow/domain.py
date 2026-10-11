@@ -115,8 +115,8 @@ class Scenario(BaseModel):
     station: Station
     trains: list[Train] = Field(max_length=MAX_TRAINS)
     now: Minutes = 0
-    delays: list[Delay] = Field(default_factory=list)
-    closures: list[Closure] = Field(default_factory=list)
+    delays: list[Delay] = Field(default_factory=list[Delay])
+    closures: list[Closure] = Field(default_factory=list[Closure])
 
     @model_validator(mode="after")
     def _check_references(self) -> Self:
