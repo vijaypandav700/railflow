@@ -1,0 +1,681 @@
+[
+  {
+    "name": "valid_gap_exactly_g",
+    "valid": true,
+    "expect": {
+      "V1": true,
+      "V2": true,
+      "V3": true,
+      "V4": true,
+      "V5": true
+    },
+    "input": {
+      "station": {
+        "gap": 5,
+        "platforms": [
+          "P1",
+          "P2"
+        ],
+        "dwell_min": 2,
+        "max_hold": 120,
+        "closure_buffer": 5
+      },
+      "trains": [
+        {
+          "id": "T1",
+          "class": "local",
+          "arr": 540,
+          "dep": 555,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T2",
+          "class": "local",
+          "arr": 550,
+          "dep": 570,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T3",
+          "class": "local",
+          "arr": 545,
+          "dep": 560,
+          "required_platform": null,
+          "platform": "P2"
+        }
+      ],
+      "delays": [],
+      "closures": [],
+      "now": 0,
+      "previous_plan": null,
+      "diff": null,
+      "plan": [
+        {
+          "train_id": "T1",
+          "platform": "P1",
+          "arr": 540,
+          "dep": 555
+        },
+        {
+          "train_id": "T2",
+          "platform": "P1",
+          "arr": 560,
+          "dep": 570
+        },
+        {
+          "train_id": "T3",
+          "platform": "P2",
+          "arr": 545,
+          "dep": 560
+        }
+      ],
+      "unscheduled": []
+    }
+  },
+  {
+    "name": "valid_train_unscheduled",
+    "valid": true,
+    "expect": {
+      "V1": true,
+      "V2": true,
+      "V3": true,
+      "V4": true,
+      "V5": true
+    },
+    "input": {
+      "station": {
+        "gap": 5,
+        "platforms": [
+          "P1",
+          "P2"
+        ],
+        "dwell_min": 2,
+        "max_hold": 120,
+        "closure_buffer": 5
+      },
+      "trains": [
+        {
+          "id": "T1",
+          "class": "local",
+          "arr": 540,
+          "dep": 555,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T2",
+          "class": "local",
+          "arr": 550,
+          "dep": 570,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T3",
+          "class": "local",
+          "arr": 545,
+          "dep": 560,
+          "required_platform": null,
+          "platform": "P2"
+        }
+      ],
+      "delays": [],
+      "closures": [],
+      "now": 0,
+      "previous_plan": null,
+      "diff": null,
+      "plan": [
+        {
+          "train_id": "T1",
+          "platform": "P1",
+          "arr": 540,
+          "dep": 555
+        },
+        {
+          "train_id": "T2",
+          "platform": "P1",
+          "arr": 560,
+          "dep": 570
+        }
+      ],
+      "unscheduled": [
+        {
+          "train_id": "T3",
+          "reason": "NO_FEASIBLE_SLOT"
+        }
+      ]
+    }
+  },
+  {
+    "name": "v1_missing_train",
+    "valid": false,
+    "expect": {
+      "V1": false,
+      "V2": true,
+      "V3": true,
+      "V4": true,
+      "V5": true
+    },
+    "input": {
+      "station": {
+        "gap": 5,
+        "platforms": [
+          "P1",
+          "P2"
+        ],
+        "dwell_min": 2,
+        "max_hold": 120,
+        "closure_buffer": 5
+      },
+      "trains": [
+        {
+          "id": "T1",
+          "class": "local",
+          "arr": 540,
+          "dep": 555,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T2",
+          "class": "local",
+          "arr": 550,
+          "dep": 570,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T3",
+          "class": "local",
+          "arr": 545,
+          "dep": 560,
+          "required_platform": null,
+          "platform": "P2"
+        }
+      ],
+      "delays": [],
+      "closures": [],
+      "now": 0,
+      "previous_plan": null,
+      "diff": null,
+      "plan": [
+        {
+          "train_id": "T1",
+          "platform": "P1",
+          "arr": 540,
+          "dep": 555
+        },
+        {
+          "train_id": "T2",
+          "platform": "P1",
+          "arr": 560,
+          "dep": 570
+        }
+      ],
+      "unscheduled": []
+    }
+  },
+  {
+    "name": "v1_train_twice",
+    "valid": false,
+    "expect": {
+      "V1": false,
+      "V2": true,
+      "V3": true,
+      "V4": true,
+      "V5": true
+    },
+    "input": {
+      "station": {
+        "gap": 5,
+        "platforms": [
+          "P1",
+          "P2"
+        ],
+        "dwell_min": 2,
+        "max_hold": 120,
+        "closure_buffer": 5
+      },
+      "trains": [
+        {
+          "id": "T1",
+          "class": "local",
+          "arr": 540,
+          "dep": 555,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T2",
+          "class": "local",
+          "arr": 550,
+          "dep": 570,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T3",
+          "class": "local",
+          "arr": 545,
+          "dep": 560,
+          "required_platform": null,
+          "platform": "P2"
+        }
+      ],
+      "delays": [],
+      "closures": [],
+      "now": 0,
+      "previous_plan": null,
+      "diff": null,
+      "plan": [
+        {
+          "train_id": "T1",
+          "platform": "P1",
+          "arr": 540,
+          "dep": 555
+        },
+        {
+          "train_id": "T2",
+          "platform": "P1",
+          "arr": 560,
+          "dep": 570
+        },
+        {
+          "train_id": "T3",
+          "platform": "P2",
+          "arr": 545,
+          "dep": 560
+        }
+      ],
+      "unscheduled": [
+        {
+          "train_id": "T3",
+          "reason": "NO_FEASIBLE_SLOT"
+        }
+      ]
+    }
+  },
+  {
+    "name": "v1_unknown_train",
+    "valid": false,
+    "expect": {
+      "V1": false,
+      "V2": true,
+      "V3": true,
+      "V4": true,
+      "V5": true
+    },
+    "input": {
+      "station": {
+        "gap": 5,
+        "platforms": [
+          "P1",
+          "P2"
+        ],
+        "dwell_min": 2,
+        "max_hold": 120,
+        "closure_buffer": 5
+      },
+      "trains": [
+        {
+          "id": "T1",
+          "class": "local",
+          "arr": 540,
+          "dep": 555,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T2",
+          "class": "local",
+          "arr": 550,
+          "dep": 570,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T3",
+          "class": "local",
+          "arr": 545,
+          "dep": 560,
+          "required_platform": null,
+          "platform": "P2"
+        }
+      ],
+      "delays": [],
+      "closures": [],
+      "now": 0,
+      "previous_plan": null,
+      "diff": null,
+      "plan": [
+        {
+          "train_id": "T1",
+          "platform": "P1",
+          "arr": 540,
+          "dep": 555
+        },
+        {
+          "train_id": "T2",
+          "platform": "P1",
+          "arr": 560,
+          "dep": 570
+        },
+        {
+          "train_id": "T3",
+          "platform": "P2",
+          "arr": 545,
+          "dep": 560
+        },
+        {
+          "train_id": "T9",
+          "platform": "P2",
+          "arr": 600,
+          "dep": 610
+        }
+      ],
+      "unscheduled": []
+    }
+  },
+  {
+    "name": "v2_unknown_platform",
+    "valid": false,
+    "expect": {
+      "V1": true,
+      "V2": false,
+      "V3": true,
+      "V4": true,
+      "V5": true
+    },
+    "input": {
+      "station": {
+        "gap": 5,
+        "platforms": [
+          "P1",
+          "P2"
+        ],
+        "dwell_min": 2,
+        "max_hold": 120,
+        "closure_buffer": 5
+      },
+      "trains": [
+        {
+          "id": "T1",
+          "class": "local",
+          "arr": 540,
+          "dep": 555,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T2",
+          "class": "local",
+          "arr": 550,
+          "dep": 570,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T3",
+          "class": "local",
+          "arr": 545,
+          "dep": 560,
+          "required_platform": null,
+          "platform": "P2"
+        }
+      ],
+      "delays": [],
+      "closures": [],
+      "now": 0,
+      "previous_plan": null,
+      "diff": null,
+      "plan": [
+        {
+          "train_id": "T1",
+          "platform": "P1",
+          "arr": 540,
+          "dep": 555
+        },
+        {
+          "train_id": "T2",
+          "platform": "P1",
+          "arr": 560,
+          "dep": 570
+        },
+        {
+          "train_id": "T3",
+          "platform": "P9",
+          "arr": 545,
+          "dep": 560
+        }
+      ],
+      "unscheduled": []
+    }
+  },
+  {
+    "name": "v3_required_platform",
+    "valid": false,
+    "expect": {
+      "V1": true,
+      "V2": true,
+      "V3": false,
+      "V4": true,
+      "V5": true
+    },
+    "input": {
+      "station": {
+        "gap": 5,
+        "platforms": [
+          "P1",
+          "P2"
+        ],
+        "dwell_min": 2,
+        "max_hold": 120,
+        "closure_buffer": 5
+      },
+      "trains": [
+        {
+          "id": "T1",
+          "class": "local",
+          "arr": 540,
+          "dep": 555,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T2",
+          "class": "local",
+          "arr": 550,
+          "dep": 570,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T3",
+          "class": "local",
+          "arr": 545,
+          "dep": 560,
+          "required_platform": "P1",
+          "platform": "P2"
+        }
+      ],
+      "delays": [],
+      "closures": [],
+      "now": 0,
+      "previous_plan": null,
+      "diff": null,
+      "plan": [
+        {
+          "train_id": "T1",
+          "platform": "P1",
+          "arr": 540,
+          "dep": 555
+        },
+        {
+          "train_id": "T2",
+          "platform": "P1",
+          "arr": 560,
+          "dep": 570
+        },
+        {
+          "train_id": "T3",
+          "platform": "P2",
+          "arr": 545,
+          "dep": 560
+        }
+      ],
+      "unscheduled": []
+    }
+  },
+  {
+    "name": "v4_overlap",
+    "valid": false,
+    "expect": {
+      "V1": true,
+      "V2": true,
+      "V3": true,
+      "V4": false,
+      "V5": true
+    },
+    "input": {
+      "station": {
+        "gap": 5,
+        "platforms": [
+          "P1",
+          "P2"
+        ],
+        "dwell_min": 2,
+        "max_hold": 120,
+        "closure_buffer": 5
+      },
+      "trains": [
+        {
+          "id": "T1",
+          "class": "local",
+          "arr": 540,
+          "dep": 555,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T2",
+          "class": "local",
+          "arr": 550,
+          "dep": 570,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T3",
+          "class": "local",
+          "arr": 545,
+          "dep": 560,
+          "required_platform": null,
+          "platform": "P2"
+        }
+      ],
+      "delays": [],
+      "closures": [],
+      "now": 0,
+      "previous_plan": null,
+      "diff": null,
+      "plan": [
+        {
+          "train_id": "T1",
+          "platform": "P1",
+          "arr": 540,
+          "dep": 555
+        },
+        {
+          "train_id": "T2",
+          "platform": "P1",
+          "arr": 550,
+          "dep": 570
+        },
+        {
+          "train_id": "T3",
+          "platform": "P2",
+          "arr": 545,
+          "dep": 560
+        }
+      ],
+      "unscheduled": []
+    }
+  },
+  {
+    "name": "v5_gap_short",
+    "valid": false,
+    "expect": {
+      "V1": true,
+      "V2": true,
+      "V3": true,
+      "V4": true,
+      "V5": false
+    },
+    "input": {
+      "station": {
+        "gap": 5,
+        "platforms": [
+          "P1",
+          "P2"
+        ],
+        "dwell_min": 2,
+        "max_hold": 120,
+        "closure_buffer": 5
+      },
+      "trains": [
+        {
+          "id": "T1",
+          "class": "local",
+          "arr": 540,
+          "dep": 555,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T2",
+          "class": "local",
+          "arr": 550,
+          "dep": 570,
+          "required_platform": null,
+          "platform": "P1"
+        },
+        {
+          "id": "T3",
+          "class": "local",
+          "arr": 545,
+          "dep": 560,
+          "required_platform": null,
+          "platform": "P2"
+        }
+      ],
+      "delays": [],
+      "closures": [],
+      "now": 0,
+      "previous_plan": null,
+      "diff": null,
+      "plan": [
+        {
+          "train_id": "T1",
+          "platform": "P1",
+          "arr": 540,
+          "dep": 555
+        },
+        {
+          "train_id": "T2",
+          "platform": "P1",
+          "arr": 558,
+          "dep": 570
+        },
+        {
+          "train_id": "T3",
+          "platform": "P2",
+          "arr": 545,
+          "dep": 560
+        }
+      ],
+      "unscheduled": []
+    }
+  }
+]

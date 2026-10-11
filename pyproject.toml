@@ -32,10 +32,17 @@ pythonVersion = "3.13"
 extraPaths = ["packages/engine/src", "apps/api/src"]
 
 [tool.importlinter]
-root_packages = ["railflow", "railflow_api"]
+root_packages = ["railflow", "railflow_api", "pydantic"]
+include_external_packages = true
 
 [[tool.importlinter.contracts]]
 name = "Engine never imports api"
 type = "forbidden"
 source_modules = ["railflow"]
 forbidden_modules = ["railflow_api"]
+
+[[tool.importlinter.contracts]]
+name = "Validator is independent"
+type = "forbidden"
+source_modules = ["railflow.validator"]
+forbidden_modules = ["railflow.domain", "railflow.timeparse", "pydantic"]

@@ -6,6 +6,7 @@ WORKDIR /app
 COPY pyproject.toml uv.lock .python-version ./
 COPY packages/engine packages/engine
 COPY apps/api apps/api
+COPY contracts contracts
 
 FROM base AS test
 RUN uv sync --frozen
