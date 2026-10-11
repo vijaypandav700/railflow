@@ -106,9 +106,7 @@ export function exportCsv(s: Scenario): string {
 			t.required_platform ?? "",
 		].join(","),
 	);
-	return (
-		["id,class,arr,dep,platform,required_platform", ...rows].join("\n") + "\n"
-	);
+	return `${["id,class,arr,dep,platform,required_platform", ...rows].join("\n")}\n`;
 }
 
 export function exportJson(s: Scenario): string {
