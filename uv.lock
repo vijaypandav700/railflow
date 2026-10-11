@@ -688,7 +688,7 @@ wheels = [
 
 [[package]]
 name = "railflow-api"
-version = "0.0.0"
+version = "0.9.0"
 source = { editable = "apps/api" }
 dependencies = [
     { name = "fastapi" },
@@ -705,7 +705,7 @@ requires-dist = [
 
 [[package]]
 name = "railflow-engine"
-version = "0.0.0"
+version = "0.9.0"
 source = { editable = "packages/engine" }
 dependencies = [
     { name = "ortools" },

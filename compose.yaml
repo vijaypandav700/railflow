@@ -3,6 +3,7 @@ services:
   api:
     build: { context: ., dockerfile: apps/api/Dockerfile, target: runtime }
     environment:
+      RAILFLOW_AUDIT_DB: /data/audit.db
       RAILFLOW_AI_MODE: rules
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/api/health')"]
