@@ -7,7 +7,7 @@ from railflow.detector import detect
 from railflow.reasons import replan_with_diff
 from railflow.validator import validate
 
-app = FastAPI(title="RailFlow API")
+app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json", title="RailFlow API")
 
 
 @app.get("/api/health")
