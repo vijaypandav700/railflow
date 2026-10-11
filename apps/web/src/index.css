@@ -1,1 +1,182 @@
 @import "tailwindcss";
+
+:root {
+	--bg: #f4f6fa;
+	--surface: #ffffff;
+	--surface-2: #eef1f7;
+	--fg: #172033;
+	--muted: #5b6577;
+	--line: #d9dee9;
+	--accent: #0072b2;
+	--accent-ink: #ffffff;
+	--bad: #c2410c;
+	color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+	--bg: #0f131b;
+	--surface: #171c27;
+	--surface-2: #1f2635;
+	--fg: #e7ebf3;
+	--muted: #9aa5b8;
+	--line: #2b3345;
+	--accent: #56b4e9;
+	--accent-ink: #08121c;
+	--bad: #ff9a62;
+	color-scheme: dark;
+}
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--fg);
+	font:
+		14px / 1.5 system-ui,
+		-apple-system,
+		"Segoe UI",
+		Roboto,
+		sans-serif;
+}
+
+h1 {
+	font-size: 20px;
+	font-weight: 700;
+}
+h2 {
+	font-size: 13px;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--muted);
+	margin: 0 0 10px;
+}
+h3 {
+	font-size: 14px;
+	font-weight: 700;
+	margin: 14px 0 6px;
+}
+
+.panel {
+	background: var(--surface);
+	color: var(--fg);
+	border: 1px solid var(--line);
+	border-radius: 12px;
+	padding: 14px 16px;
+}
+
+button,
+select,
+input {
+	font: inherit;
+	color: var(--fg);
+	background: var(--surface-2);
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	padding: 6px 12px;
+	min-height: 36px;
+}
+input {
+	background: var(--surface);
+}
+button {
+	cursor: pointer;
+	font-weight: 600;
+}
+button:hover:not(:disabled) {
+	border-color: var(--accent);
+}
+button[aria-pressed="true"] {
+	background: var(--accent);
+	color: var(--accent-ink);
+	border-color: var(--accent);
+}
+button:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+input[type="range"] {
+	flex: 1 1 200px;
+	min-width: 140px;
+	padding: 0;
+	accent-color: var(--accent);
+}
+
+:focus-visible {
+	outline: 3px solid var(--accent);
+	outline-offset: 2px;
+}
+g[tabindex]:focus-visible {
+	outline: none;
+}
+g[tabindex]:focus-visible rect {
+	stroke: var(--accent);
+	stroke-width: 4;
+}
+
+p[role="alert"] {
+	color: var(--bad);
+	font-weight: 600;
+}
+[data-testid="legend"] {
+	color: var(--muted);
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	font-variant-numeric: tabular-nums;
+}
+th {
+	text-align: left;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--muted);
+	padding: 6px 10px;
+	border-bottom: 2px solid var(--line);
+}
+td {
+	padding: 6px 10px;
+	border-bottom: 1px solid var(--line);
+}
+
+ul[data-testid="log"],
+ul[data-testid="conflicts"] {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	max-height: 200px;
+	overflow: auto;
+}
+ul[data-testid="log"] li,
+ul[data-testid="conflicts"] li {
+	padding: 4px 8px;
+	margin-bottom: 4px;
+	border-left: 3px solid var(--line);
+	background: var(--surface-2);
+	border-radius: 0 6px 6px 0;
+}
+ul[data-testid="log"] b {
+	font-family: ui-monospace, Consolas, monospace;
+	margin-right: 6px;
+}
+
+@media (max-width: 640px) {
+	main.mx-auto {
+		padding: 10px;
+	}
+	.panel {
+		padding: 10px;
+	}
+	table {
+		display: block;
+		overflow-x: auto;
+		white-space: nowrap;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation: none;
+		transition: none;
+	}
+}
