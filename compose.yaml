@@ -1,0 +1,20 @@
+name: railflow
+services:
+  api:
+    build: { context: ., dockerfile: apps/api/Dockerfile }
+    environment:
+      RAILFLOW_AI_MODE: rules
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/api/health')"]
+      interval: 10s
+      retries: 5
+    read_only: true
+    tmpfs: ["/tmp"]
+    volumes: ["audit:/data"]
+  web:
+    build: { context: ., dockerfile: apps/web/Dockerfile }
+    ports: ["${WEB_PORT:-8080}:80"]
+    depends_on:
+      api: { condition: service_healthy }
+volumes:
+  audit: {}
