@@ -5,6 +5,7 @@ import { useSimulation } from "../sim/useSimulation";
 import { Gantt } from "./Gantt";
 import { fmt, parseTime } from "./time";
 import type { Scenario } from "./types";
+import { ValidatorPanel } from "./ValidatorPanel";
 
 type Props = { api: ReturnType<typeof createApi>; scenario: Scenario };
 
@@ -123,6 +124,8 @@ export function SimulationPanel({ api, scenario }: Props) {
 					{sim.unscheduled.map((u) => `${u.train_id} (${u.reason})`).join(", ")}
 				</p>
 			) : null}
+
+			<ValidatorPanel result={sim.live} />
 
 			<h3>Inject disruption</h3>
 			<div className="flex flex-wrap items-center gap-2">
