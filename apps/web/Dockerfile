@@ -3,6 +3,7 @@ RUN npm install -g pnpm@12.6.0
 WORKDIR /app
 COPY pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY apps/web/package.json apps/web/package.json
+COPY packages/validator-ts/package.json packages/validator-ts/package.json
 RUN pnpm install --frozen-lockfile
 COPY apps/web apps/web
 RUN pnpm --dir apps/web build
