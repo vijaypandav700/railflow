@@ -1,0 +1,9 @@
+{
+  "name": "railflow",
+  "image": "mcr.microsoft.com/devcontainers/python:3.13",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": { "version": "24" }
+  },
+  "postCreateCommand": "pip install uv && npm install -g pnpm@12.6.0 && uv sync && pnpm install",
+  "forwardPorts": [5173, 8000, 8080]
+}
