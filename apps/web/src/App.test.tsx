@@ -20,7 +20,7 @@ test("shows title and the plan screen", async () => {
 test("theme toggle flips data-theme", async () => {
 	render(<App api={createApi("http://test", fake)} />);
 	const before = document.documentElement.getAttribute("data-theme");
-	fireEvent.click(screen.getByRole("button", { name: /mode/i }));
+	fireEvent.click(screen.getByRole("button", { name: /theme/i }));
 	const after = document.documentElement.getAttribute("data-theme");
 	expect(after).not.toBe(before);
 	expect(["light", "dark"]).toContain(after);
