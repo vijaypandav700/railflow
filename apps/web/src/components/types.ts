@@ -12,6 +12,7 @@ export type Scenario = {
 		dep: number;
 		platform?: string | null;
 		required_platform?: string | null;
+		class?: string;
 	}[];
 	closures: { id: string; platform: string; start: number; end: number }[];
 	delays: { train_id: string; minutes: number }[];
