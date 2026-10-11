@@ -93,3 +93,37 @@ See [docs/LIMITS.md](docs/LIMITS.md). Short version: one station, no routing or 
     contracts         JSON schemas, golden and generated vectors, OpenAPI
     scenarios         S01 to S12
     docs              limits, ADRs, benchmark results
+
+## Quick start
+
+Needs Docker (Docker Desktop with WSL2 on Windows) and Git.
+
+```bash
+git clone https://github.com/vijaypandav700/railflow.git
+cd railflow
+docker compose up --build
+```
+
+Open http://localhost:8080. If port 8080 is busy, set `WEB_PORT` in `.env`.
+
+## Try it
+
+1. Pick scenario S03 in the picker.
+2. In the simulation panel, inject a delay on T101 (25 min) and review the revision.
+3. Check the reason codes, then press Accept. The validator gates every plan.
+4. Press Break it to see an invalid plan rejected, then Restore plan.
+5. Type `T101 25 min late, P2 band 10 se 10:30 tak` in the text box, check the chips, then Confirm.
+
+## Tests
+
+```bash
+uv run pytest -q --ignore=packages/engine/tests/test_fuzz.py   # Python
+FUZZ_N=10000 uv run pytest packages/engine/tests/test_fuzz.py  # full fuzz (about 3 min)
+uv run python packages/engine/tests/gen_differential.py        # then run the TS tests below
+pnpm --dir packages/validator-ts test                          # includes the differential test
+pnpm --dir apps/web test
+```
+
+## Limits and evidence
+
+See [docs/limits.md](docs/limits.md).
