@@ -477,3 +477,9 @@ export function toEvent(p: Proposal): NewEvent {
 		? { kind: "delay", train_id: p.train_id, minutes: p.minutes }
 		: { kind: "closure", platform: p.platform, start: p.start, end: p.end };
 }
+
+/** True when text must never reach any model: empty, oversize, or instruction-like. */
+export function isBlocked(text: string): boolean {
+	const raw = text.trim();
+	return raw.length === 0 || raw.length > MAX_TEXT || INJECTION.test(raw);
+}
