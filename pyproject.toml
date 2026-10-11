@@ -5,7 +5,13 @@ requires-python = ">=3.13"
 dependencies = ["railflow-engine", "railflow-api"]
 
 [dependency-groups]
-dev = ["pytest>=8", "ruff>=0.6", "httpx>=0.27"]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+    "pyright>=1.1.414",
+    "import-linter>=2.15",
+    "httpx2>=2.13.1",
+]
 
 [tool.uv.workspace]
 members = ["packages/engine", "apps/api"]
@@ -17,3 +23,19 @@ railflow-api = { workspace = true }
 [tool.ruff]
 line-length = 100
 target-version = "py313"
+
+[tool.pyright]
+include = ["packages", "apps"]
+exclude = ["**/.venv", "**/node_modules"]
+typeCheckingMode = "strict"
+pythonVersion = "3.13"
+extraPaths = ["packages/engine/src", "apps/api/src"]
+
+[tool.importlinter]
+root_packages = ["railflow", "railflow_api"]
+
+[[tool.importlinter.contracts]]
+name = "Engine never imports api"
+type = "forbidden"
+source_modules = ["railflow"]
+forbidden_modules = ["railflow_api"]
