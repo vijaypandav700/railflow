@@ -15,6 +15,12 @@ Json = dict[str, Any]
 W_DELAY = 10
 W_MOVE = 1_000
 
+# profile -> (delay weight, move weight)
+PROFILES: dict[str, tuple[int, int]] = {
+    "min_change": (W_DELAY, W_MOVE),
+    "min_delay": (100, 50),
+}
+
 
 def _previous(data: Json) -> dict[str, Json]:
     rows = data.get("previous_plan")
@@ -35,7 +41,7 @@ def _previous(data: Json) -> dict[str, Json]:
     }
 
 
-def replan(data: Json, time_limit: float = 5.0) -> Json:
+def replan(data: Json, time_limit: float = 5.0, profile: str = "min_change") -> Json:
     """Return status, plan (frozen + replanned), unscheduled, warnings, previous_plan."""
     station: Json = data["station"]
     gap = int(station["gap"])
@@ -43,6 +49,9 @@ def replan(data: Json, time_limit: float = 5.0) -> Json:
     buffer = gap if raw_buffer is None else int(raw_buffer)
     max_hold = int(station["max_hold"])
     now = int(data["now"])
+    if profile not in PROFILES:
+        raise ValueError(f"unknown profile {profile}")
+    w_delay, w_move = PROFILES[profile]
     platforms: list[str] = list(station["platforms"])
     trains: list[Json] = sorted(data["trains"], key=lambda t: t["id"])
     known = {t["id"] for t in trains}
@@ -122,11 +131,11 @@ def replan(data: Json, time_limit: float = 5.0) -> Json:
             )
             lits[tid].append((p, lit))
             moved = 1 if home is not None and p != home else 0
-            terms.append(lit * (W_MOVE * moved + index))
+            terms.append(lit * (w_move * moved + index))
         skip = model.new_bool_var(f"u_{tid}")
         model.add_exactly_one([lit for _, lit in lits[tid]] + [skip])
         terms.append(skip * (W_UNSCHED * weight))
-        terms.append(W_DELAY * weight * (arr + dep - sched_arr - sched_dep))
+        terms.append(w_delay * weight * (arr + dep - sched_arr - sched_dep))
 
     for p in platforms:
         model.add_no_overlap(intervals[p])

@@ -115,8 +115,8 @@ def build_diff(data: Json, out: Json) -> list[Json]:
     return diff
 
 
-def replan_with_diff(data: Json, time_limit: float = 5.0) -> Json:
-    out = replan(data, time_limit)
+def replan_with_diff(data: Json, time_limit: float = 5.0, profile: str = "min_change") -> Json:
+    out = replan(data, time_limit, profile)
     ok = out["status"] in ("OPTIMAL", "FEASIBLE")
     out["diff"] = build_diff(data, out) if ok else []
     return out
