@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { createApi } from "../api/client";
 import { Gantt, Legend } from "./Gantt";
 import { ImportExport } from "./ImportExport";
+import { MetricsPanel } from "./MetricsPanel";
 import { SimulationPanel } from "./SimulationPanel";
 import { TimetableEditor } from "./TimetableEditor";
 import type { Scenario } from "./types";
@@ -29,6 +30,7 @@ export function PlanScreen({ api }: Props) {
 
 	useEffect(() => {
 		if (!selected) return;
+		setScenario(null);
 		api
 			.GET("/api/scenarios/{scenario_id}", {
 				params: { path: { scenario_id: selected } },
@@ -139,6 +141,7 @@ export function PlanScreen({ api }: Props) {
 						api={api}
 						scenario={scenario}
 					/>
+					<MetricsPanel key={`m-${selected}`} api={api} scenario={scenario} />
 				</>
 			) : null}
 		</section>
