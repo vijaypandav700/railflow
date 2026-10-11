@@ -47,7 +47,7 @@
           "weighted_delay": 0
         },
         "status": "OPTIMAL",
-        "time_ms": 9
+        "time_ms": 8
       }
     },
     "ours_beats_or_ties": true
@@ -100,7 +100,7 @@
           "weighted_delay": 75
         },
         "status": "OPTIMAL",
-        "time_ms": 16
+        "time_ms": 15
       }
     },
     "ours_beats_or_ties": true
@@ -300,7 +300,7 @@
           "weighted_delay": 140
         },
         "status": "OPTIMAL",
-        "time_ms": 220
+        "time_ms": 208
       },
       "min_delay": {
         "metrics": {
@@ -312,7 +312,7 @@
           "weighted_delay": 140
         },
         "status": "OPTIMAL",
-        "time_ms": 228
+        "time_ms": 219
       }
     },
     "ours_beats_or_ties": true
@@ -418,7 +418,7 @@
           "weighted_delay": 0
         },
         "status": "OPTIMAL",
-        "time_ms": 4
+        "time_ms": 3
       }
     },
     "ours_beats_or_ties": true
@@ -459,7 +459,7 @@
           "weighted_delay": 0
         },
         "status": "OPTIMAL",
-        "time_ms": 2
+        "time_ms": 1
       },
       "min_delay": {
         "metrics": {
@@ -512,7 +512,7 @@
           "weighted_delay": 318
         },
         "status": "FEASIBLE",
-        "time_ms": 5011
+        "time_ms": 5012
       },
       "min_delay": {
         "metrics": {
@@ -524,7 +524,7 @@
           "weighted_delay": 5
         },
         "status": "FEASIBLE",
-        "time_ms": 5012
+        "time_ms": 5013
       }
     },
     "ours_beats_or_ties": true

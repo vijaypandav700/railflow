@@ -23,3 +23,7 @@
   arbitrary phrasing.
 - LLM mode (Ollama) is optional, built and tested with a mocked model, and not demoed live.
   Rules mode is the default and works offline.
+- Against a greedy first-fit planner, the solver ties on weighted delay in all 10 replannable
+  scenarios, and moves far fewer trains (S12: 14 vs 49, S03: 1 vs 10). It beats the push-later
+  planner on delay in most. First-fit does not try to keep trains on their platforms, so the
+  moved-trains gap is partly by design. See docs/results.md.
