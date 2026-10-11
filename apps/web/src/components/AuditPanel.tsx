@@ -84,7 +84,9 @@ export function AuditPanel({ base = "/api", fetchImpl }: Props) {
 		}
 	}
 
-	const shown = entries ? [...entries].reverse().slice(0, 50) : [];
+	const shown = entries
+		? [...entries].sort((a, b) => b.seq - a.seq).slice(0, 50)
+		: [];
 
 	return (
 		<section aria-label="Audit log" data-testid="audit">
