@@ -112,7 +112,9 @@ def main() -> None:
             continue
         rng = random.Random(seed)
         for kind in KINDS:
-            plan, unsched, diff = out["plan"], out["unscheduled"], out["diff"]
+            plan: list[dict[str, Any]] = out["plan"]
+            unsched: list[dict[str, Any]] = out["unscheduled"]
+            diff: list[dict[str, Any]] = out["diff"]
             if kind in ("none", "bad_reason", "strip_diff"):
                 if kind == "bad_reason":
                     unsched = [{"train_id": u["train_id"], "reason": "BOGUS"} for u in unsched] or [
@@ -125,7 +127,7 @@ def main() -> None:
                 if bad is None or bad == plan:
                     continue
                 plan = bad
-            inp = {
+            inp: dict[str, Any] = {
                 **data,
                 "plan": plan,
                 "unscheduled": unsched,
