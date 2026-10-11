@@ -4,6 +4,7 @@ import type { NewEvent, Reason } from "../sim/logic";
 import { useSimulation } from "../sim/useSimulation";
 import { Gantt } from "./Gantt";
 import { NlBox } from "./NlBox";
+import { loadSettings, Settings } from "./Settings";
 import { fmt, parseTime } from "./time";
 import type { Scenario } from "./types";
 import { ValidatorPanel } from "./ValidatorPanel";
@@ -17,6 +18,7 @@ function why(r: Reason): string {
 
 export function SimulationPanel({ api, scenario }: Props) {
 	const sim = useSimulation(api, scenario);
+	const [ai, setAi] = useState(loadSettings);
 	const [kind, setKind] = useState<"delay" | "closure">("delay");
 	const [trainId, setTrainId] = useState(scenario.trains[0]?.id ?? "");
 	const [minutes, setMinutes] = useState("25");
@@ -128,7 +130,10 @@ export function SimulationPanel({ api, scenario }: Props) {
 
 			<ValidatorPanel result={sim.live} />
 
+			<Settings value={ai} onChange={setAi} />
 			<NlBox
+				mode={ai.mode}
+				llm={{ baseUrl: ai.baseUrl, model: ai.model }}
 				ctx={{ trains: scenario.trains, platforms: scenario.station.platforms }}
 				disabled={sim.busy || !!sim.pending}
 				onConfirm={(events) => {
