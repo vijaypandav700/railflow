@@ -1,7 +1,9 @@
-"""Generate differential vectors for the TS twin. Run: uv run python packages/engine/tests/gen_differential.py"""
+"""Writes contracts/differential_vectors.json with Python verdicts. Run: python gen_differential.py [N]."""
 
+import copy
 import json
 import random
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -9,27 +11,36 @@ from railflow.reasons import replan_with_diff
 from railflow.solver import assign
 from railflow.validator import validate
 
+Json = dict[str, Any]
+N = int(sys.argv[1]) if len(sys.argv) > 1 else 2000
 OUT = Path(__file__).resolve().parents[3] / "contracts" / "differential_vectors.json"
-TARGET = 2000
 KINDS = [
+    "none",
+    "none",
     "none",
     "drop",
     "duplicate",
     "shift_early",
-    "shift_late",
+    "hold_long",
     "unknown_platform",
     "clash",
-    "jitter",
-    "edge_gap",
+    "gap_squeeze",
+    "short_dwell",
     "bad_reason",
-    "strip_diff",
+    "good_unsched",
+    "strip_reason",
+    "frozen_change",
+    "wrong_required",
+    "ok_required",
+    "closure_hit",
+    "unknown_train",
 ]
+JUNK: list[Any] = [{}, None, {"station": {"gap": 5}}]
 
 
-def build(seed: int) -> dict[str, Any] | None:
-    rng = random.Random(seed)
+def base(rng: random.Random) -> Json | None:
     platforms = [f"P{i}" for i in range(1, rng.randint(2, 4) + 1)]
-    trains: list[dict[str, Any]] = []
+    trains: list[Json] = []
     for i in range(rng.randint(3, 9)):
         arr = rng.randint(600, 700)
         trains.append(
@@ -53,7 +64,7 @@ def build(seed: int) -> dict[str, Any] | None:
         for t in kept
         if t["arr"] > now and rng.random() < 0.4
     ]
-    closures: list[dict[str, Any]] = []
+    closures: list[Json] = []
     if rng.random() < 0.6:
         start = rng.randint(now + 1, 720)
         closures.append(
@@ -64,93 +75,117 @@ def build(seed: int) -> dict[str, Any] | None:
                 "end": start + rng.randint(10, 60),
             }
         )
-    return {"station": station, "trains": kept, "closures": closures, "delays": delays, "now": now}
-
-
-def mutate(
-    plan: list[dict[str, Any]], kind: str, gap: int, rng: random.Random
-) -> list[dict[str, Any]] | None:
-    rows = [dict(r) for r in plan]
-    if len(rows) < 2:
+    data: Json = {
+        "station": station,
+        "trains": kept,
+        "closures": closures,
+        "delays": delays,
+        "now": now,
+    }
+    out = replan_with_diff(data)
+    if out["status"] not in ("OPTIMAL", "FEASIBLE"):
         return None
+    return {
+        **data,
+        "plan": out["plan"],
+        "unscheduled": out["unscheduled"],
+        "previous_plan": out["previous_plan"],
+        "diff": out["diff"],
+    }
+
+
+def mutate(inp: Json, kind: str, rng: random.Random) -> bool:
+    rows: list[Json] = inp["plan"]
+    if len(rows) < 2:
+        return False
     i = rng.randrange(len(rows))
     j = (i + 1) % len(rows)
+    r, s = rows[i], rows[j]
     if kind == "drop":
         rows.pop(i)
     elif kind == "duplicate":
-        rows.append(dict(rows[i]))
+        rows.append(dict(r))
     elif kind == "shift_early":
-        rows[i]["arr"] -= rng.randint(1, 30)
-        rows[i]["dep"] -= rng.randint(1, 30)
-    elif kind == "shift_late":
-        rows[i]["arr"] += rng.randint(1, 15)
+        r["arr"] -= 30
+        r["dep"] -= 30
+    elif kind == "hold_long":
+        r["arr"] += 300
+        r["dep"] += 300
     elif kind == "unknown_platform":
-        rows[i]["platform"] = "P99"
+        r["platform"] = "P99"
     elif kind == "clash":
-        rows[j] = {**rows[j], "platform": rows[i]["platform"], "arr": rows[i]["arr"] + 1}
-    elif kind == "jitter":
-        rows[i]["arr"] += rng.randint(-3, 3)
-        rows[i]["dep"] += rng.randint(-3, 3)
-    elif kind == "edge_gap":
-        arr = rows[i]["dep"] + gap + rng.choice([-1, 0, 1])
-        rows[j] = {**rows[j], "platform": rows[i]["platform"], "arr": arr, "dep": arr + 10}
-    else:
-        return None
-    return rows
+        s.update(platform=r["platform"], arr=r["arr"] + 1, dep=r["dep"])
+    elif kind == "gap_squeeze":
+        s.update(platform=r["platform"], arr=r["dep"] + 1, dep=r["dep"] + 11)
+    elif kind == "short_dwell":
+        r["dep"] = r["arr"]
+    elif kind == "bad_reason":
+        inp["unscheduled"].append({"train_id": rows.pop(i)["train_id"], "reason": "BOGUS"})
+    elif kind == "good_unsched":
+        inp["unscheduled"].append(
+            {"train_id": rows.pop(i)["train_id"], "reason": "NO_FEASIBLE_SLOT"}
+        )
+    elif kind == "strip_reason":
+        hit = next((d for d in inp["diff"] if d["class"] != "KEPT"), None)
+        if hit is None:
+            return False
+        hit["reasons"] = []
+    elif kind == "frozen_change":
+        prev = inp["previous_plan"]
+        frozen = {p["train_id"] for p in prev if p["arr"] <= inp["now"]}
+        row = next((x for x in rows if x["train_id"] in frozen), None)
+        if row is None:
+            return False
+        row["arr"] += 3
+        row["dep"] += 3
+    elif kind in ("wrong_required", "ok_required"):
+        train = next(t for t in inp["trains"] if t["id"] == r["train_id"])
+        other = next((p for p in inp["station"]["platforms"] if p != r["platform"]), "P1")
+        train["required_platform"] = other if kind == "wrong_required" else r["platform"]
+    elif kind == "closure_hit":
+        inp["closures"].append(
+            {"id": "CX", "platform": r["platform"], "start": r["arr"] - 2, "end": r["dep"] + 2}
+        )
+    elif kind == "unknown_train":
+        r["train_id"] = "TX99"
+    return True
+
+
+def digest(result: Json) -> Json:
+    errors: Json = {}
+    for c in result["checks"]:
+        found = [
+            json.dumps(sorted(e.get("trains", [])), separators=(",", ":"))
+            for e in c.get("errors", [])
+        ]
+        errors[c["id"]] = sorted(found)
+    return {
+        "valid": result["valid"],
+        "expect": {c["id"]: c["ok"] for c in result["checks"]},
+        "warnings": [w["code"] for w in result.get("warnings", [])],
+        "errors": errors,
+    }
 
 
 def main() -> None:
-    vectors: list[dict[str, Any]] = []
-    seed = 0
-    while len(vectors) < TARGET:
-        seed += 1
-        data = build(seed)
-        if data is None:
+    vectors: list[Json] = []
+    for n, raw in enumerate(JUNK):
+        vectors.append({"name": f"junk_{n}", "input": raw, **digest(validate(raw))})
+    i = 0
+    while len(vectors) < N:
+        i += 1
+        rng = random.Random(i)
+        inp = base(rng)
+        if inp is None:
             continue
-        out = replan_with_diff(data)
-        if out["status"] not in ("OPTIMAL", "FEASIBLE"):
-            continue
-        rng = random.Random(seed)
-        for kind in KINDS:
-            plan: list[dict[str, Any]] = out["plan"]
-            unsched: list[dict[str, Any]] = out["unscheduled"]
-            diff: list[dict[str, Any]] = out["diff"]
-            if kind in ("none", "bad_reason", "strip_diff"):
-                if kind == "bad_reason":
-                    unsched = [{"train_id": u["train_id"], "reason": "BOGUS"} for u in unsched] or [
-                        {"train_id": plan[0]["train_id"], "reason": "BOGUS"}
-                    ]
-                if kind == "strip_diff":
-                    diff = [{**d, "reasons": []} if d["class"] != "KEPT" else d for d in diff]
-            else:
-                bad = mutate(plan, kind, data["station"]["gap"], rng)
-                if bad is None or bad == plan:
-                    continue
-                plan = bad
-            inp: dict[str, Any] = {
-                **data,
-                "plan": plan,
-                "unscheduled": unsched,
-                "previous_plan": out["previous_plan"],
-                "diff": diff,
-            }
-            res = validate(inp)
-            vectors.append(
-                {
-                    "name": f"s{seed}_{kind}",
-                    "valid": bool(res["valid"]),
-                    "expect": {c["id"]: bool(c["ok"]) for c in res["checks"]},
-                    "warnings": [w["code"] for w in res["warnings"]],
-                    "input": inp,
-                }
-            )
-    vectors = vectors[:TARGET]
-    OUT.write_text(json.dumps(vectors))
-    ok = sum(1 for v in vectors if v["valid"])
-    print(f"wrote {len(vectors)} vectors to {OUT}: {ok} valid, {len(vectors) - ok} invalid")
-    for n in range(1, 11):
-        fails = sum(1 for v in vectors if v["expect"].get(f"V{n}") is False)
-        print(f"  V{n}: {fails} failing vectors")
+        kind = rng.choice(KINDS)
+        inp = copy.deepcopy(inp)
+        if not mutate(inp, kind, rng):
+            kind = "none"
+        vectors.append({"name": f"v{i:05d}_{kind}", "input": inp, **digest(validate(inp))})
+    OUT.write_text(json.dumps(vectors), encoding="utf-8")
+    good = sum(1 for v in vectors if v["valid"])
+    print(f"wrote {len(vectors)} vectors: {good} valid, {len(vectors) - good} invalid -> {OUT}")
 
 
 main()
