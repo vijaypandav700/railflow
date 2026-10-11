@@ -102,3 +102,23 @@ def test_scenario_replan_valid(path: Path) -> None:
     out = replan(data)
     assert out["status"] in ("OPTIMAL", "FEASIBLE")
     check(data, out)
+
+
+def test_closure_starting_before_now_with_train_inside() -> None:
+    from railflow.replan import replan
+
+    data = {
+        "station": {"gap": 5, "platforms": ["P1", "P2"], "dwell_min": 2, "max_hold": 120},
+        "trains": [
+            {"id": "T1", "arr": 605, "dep": 620, "platform": "P2"},
+            {"id": "T2", "arr": 640, "dep": 650, "platform": "P2"},
+        ],
+        "closures": [{"id": "C1", "platform": "P2", "start": 600, "end": 690}],
+        "delays": [],
+        "now": 615,
+    }
+    out = replan(data)
+    assert out["status"] in ("OPTIMAL", "FEASIBLE")
+    t1 = next(r for r in out["plan"] if r["train_id"] == "T1")
+    assert (t1["platform"], t1["arr"]) == ("P2", 605)
+    assert any(w["code"] == "CLOSURE_DEFERRED" for w in out["warnings"])

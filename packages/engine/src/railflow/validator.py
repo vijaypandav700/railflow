@@ -144,7 +144,7 @@ def _frozen_ids(data: Json) -> set[str]:
 
 
 def _deferred(data: Json, closure: Json) -> list[Json]:
-    """R9: frozen trains still on the closed platform when the closure starts."""
+    """R9: frozen trains on the closed platform that overlap the closure window."""
     frozen = _frozen_ids(data)
     start = closure["start"]
     buffer = _closure_buffer(data)
@@ -153,7 +153,7 @@ def _deferred(data: Json, closure: Json) -> list[Json]:
         for r in data["plan"]
         if r["platform"] == closure["platform"]
         and r["train_id"] in frozen
-        and r["arr"] < start
+        and r["arr"] < closure["end"]
         and r["dep"] + buffer > start
     ]
 

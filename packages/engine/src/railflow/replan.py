@@ -71,7 +71,7 @@ def replan(data: Json, time_limit: float = 5.0) -> Json:
         deferred = [
             r
             for r in frozen.values()
-            if r["platform"] == p and r["arr"] < c["start"] and r["dep"] + buffer > c["start"]
+            if r["platform"] == p and r["arr"] < c["end"] and r["dep"] + buffer > c["start"]
         ]
         effective = max([c["start"], *[r["dep"] + gap for r in deferred]])
         start = effective + gap - buffer
