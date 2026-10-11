@@ -4,6 +4,7 @@ import type { createApi } from "../api/client";
 import { Gantt, Legend } from "./Gantt";
 import { ImportExport } from "./ImportExport";
 import { SimulationPanel } from "./SimulationPanel";
+import { TimetableEditor } from "./TimetableEditor";
 import type { Scenario } from "./types";
 
 type Props = { api: ReturnType<typeof createApi> };
@@ -119,6 +120,13 @@ export function PlanScreen({ api }: Props) {
 							</li>
 						))}
 					</ul>
+					<TimetableEditor
+						scenario={scenario}
+						onChange={(next) => {
+							setScenario(next);
+							setRev(rev + 1);
+						}}
+					/>
 					<ImportExport
 						scenario={scenario}
 						onImport={(next) => {
