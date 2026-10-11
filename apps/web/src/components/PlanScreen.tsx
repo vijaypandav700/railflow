@@ -1,8 +1,8 @@
 import { validate } from "@railflow/validator";
 import { useEffect, useMemo, useState } from "react";
 import type { createApi } from "../api/client";
-import { DisruptPanel } from "./DisruptPanel";
 import { Gantt, Legend } from "./Gantt";
+import { SimulationPanel } from "./SimulationPanel";
 import type { Scenario } from "./types";
 
 type Props = { api: ReturnType<typeof createApi> };
@@ -117,7 +117,7 @@ export function PlanScreen({ api }: Props) {
 							</li>
 						))}
 					</ul>
-					<DisruptPanel key={selected} api={api} scenario={scenario} />
+					<SimulationPanel key={selected} api={api} scenario={scenario} />
 				</>
 			) : null}
 		</section>

@@ -21,6 +21,8 @@ type Props = {
 	gap: number;
 	conflicts?: string[];
 	classes?: Record<string, string>;
+	frozen?: string[];
+	idPrefix?: string;
 	now?: number;
 	width?: number;
 };
@@ -53,6 +55,8 @@ export function Gantt({
 	gap,
 	conflicts = [],
 	classes = {},
+	frozen = [],
+	idPrefix = "",
 	now,
 	width = 900,
 }: Props) {
@@ -210,7 +214,7 @@ export function Gantt({
 				))}
 
 				{closures.map((c) => (
-					<g key={c.id} data-testid={`closure-${c.id}`}>
+					<g key={c.id} data-testid={`${idPrefix}closure-${c.id}`}>
 						<rect
 							x={x(c.start)}
 							y={rowY(c.platform) + 4}
@@ -248,7 +252,7 @@ export function Gantt({
 						<g
 							key={r.train_id}
 							tabIndex={0}
-							data-testid={`bar-${r.train_id}`}
+							data-testid={`${idPrefix}bar-${r.train_id}`}
 							data-conflict={isBad ? "true" : "false"}
 						>
 							<title>{`${r.train_id} (${cls}) ${r.platform} ${fmt(r.arr)}-${fmt(r.dep)}`}</title>
@@ -286,6 +290,7 @@ export function Gantt({
 								fontWeight="700"
 								fill="#0b2540"
 							>
+								{frozen.includes(r.train_id) ? "🔒 " : ""}
 								{isBad ? "! " : ""}
 								{cls[0]?.toUpperCase()}·{r.train_id}
 							</text>
