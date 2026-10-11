@@ -1,3 +1,5 @@
+from collections.abc import Callable
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -14,10 +16,17 @@ DATA: dict[str, Any] = {
 }
 
 
+def _loader(data: dict[str, Any]) -> Callable[[Path], dict[str, Any]]:
+    def load(_path: Path) -> dict[str, Any]:
+        return data
+
+    return load
+
+
 def test_detect_cli_reports_and_exits_1(
     monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    monkeypatch.setattr(cli, "load_plan_file", lambda _p: DATA)
+    monkeypatch.setattr(cli, "load_plan_file", _loader(DATA))
     assert cli.main(["detect", "x.json"]) == 1
     out = capsys.readouterr().out
     assert "OVERLAP" in out
@@ -28,6 +37,6 @@ def test_detect_cli_clean_exits_0(
     monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
     clean = {**DATA, "plan": DATA["plan"][:1]}
-    monkeypatch.setattr(cli, "load_plan_file", lambda _p: clean)
+    monkeypatch.setattr(cli, "load_plan_file", _loader(clean))
     assert cli.main(["detect", "x.json"]) == 0
     assert "0 conflict(s)" in capsys.readouterr().out
