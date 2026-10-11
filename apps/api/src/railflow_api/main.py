@@ -1,9 +1,12 @@
+import os
 import time
+from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from railflow import __version__
 from railflow.detector import detect
+from railflow.planfile import load_plan_file
 from railflow.reasons import replan_with_diff
 from railflow.validator import validate
 
@@ -77,3 +80,26 @@ def api_replan(body: dict[str, Any]) -> dict[str, Any]:
     }
     ok = bool(validation["valid"])
     return {"alternatives": [alt] if ok else [], "rejected_plans": [] if ok else [alt]}
+
+
+def _scenario_files() -> dict[str, Path]:
+    env = os.environ.get("RAILFLOW_SCENARIOS")
+    root = Path(env) if env else Path(__file__).resolve().parents[4] / "scenarios"
+    return {p.stem: p for p in sorted(root.glob("S*.json"))}
+
+
+@app.get("/api/scenarios")
+def api_scenarios() -> list[dict[str, str]]:
+    return [{"id": sid} for sid in _scenario_files()]
+
+
+@app.get("/api/scenarios/{scenario_id}")
+def api_scenario(scenario_id: str) -> dict[str, Any]:
+    path = _scenario_files().get(scenario_id)
+    if path is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "SCENARIO_UNKNOWN", "message": scenario_id},
+        )
+    data = load_plan_file(path)
+    return {k: data[k] for k in ("station", "trains", "closures", "delays", "now")}
