@@ -8,6 +8,7 @@ from pathlib import Path
 from railflow import __version__
 from railflow.detector import detect
 from railflow.planfile import PlanFileError, load_plan_file
+from railflow.replan import replan
 from railflow.solver import assign
 from railflow.validator import Json, validate
 
@@ -37,6 +38,8 @@ def main(argv: list[str] | None = None) -> int:
     detect_cmd.add_argument("--json", action="store_true", dest="as_json")
     assign_cmd = commands.add_parser("assign", help="solve a platform plan")
     assign_cmd.add_argument("file", type=Path)
+    replan_cmd = commands.add_parser("replan", help="replan from now")
+    replan_cmd.add_argument("file", type=Path)
     args = parser.parse_args(argv)
 
     try:
@@ -44,6 +47,32 @@ def main(argv: list[str] | None = None) -> int:
     except PlanFileError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
+    if args.command == "replan":
+        out = replan(data)
+        was = {r["train_id"]: r for r in out["previous_plan"]}
+        print(f"status {out['status']}")
+        for r in out["plan"]:
+            new = (r["platform"], r["arr"], r["dep"])
+            old = was.get(r["train_id"])
+            before = (old["platform"], old["arr"], old["dep"]) if old else new
+            note = f"  <- was {before[0]} {before[1]}-{before[2]}" if before != new else ""
+            print(f"{r['train_id']:<8}{new[0]:<5}{new[1]:>5}{new[2]:>5}{note}")
+        for u in out["unscheduled"]:
+            print(f"{u['train_id']:<8}UNSCHEDULED {u['reason']}")
+        for w in out["warnings"]:
+            print(f"WARN {w['code']} closure {w['closure']} trains {', '.join(w['trains'])}")
+        if out["status"] not in ("OPTIMAL", "FEASIBLE"):
+            return 1
+        check = validate(
+            {
+                **data,
+                "plan": out["plan"],
+                "unscheduled": out["unscheduled"],
+                "previous_plan": out["previous_plan"],
+            }
+        )
+        print("VALID" if check["valid"] else "INVALID")
+        return 0 if check["valid"] else 1
     if args.command == "assign":
         out = assign(data)
         print(f"status {out['status']}")
