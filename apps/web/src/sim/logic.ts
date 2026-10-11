@@ -1,5 +1,6 @@
 import { fmt } from "../components/time";
 import type { Scenario } from "../components/types";
+import type { Facts } from "../nl/explain";
 
 export type Row = {
 	train_id: string;
@@ -27,6 +28,10 @@ export type Reason = {
 };
 export type DiffItem = { train_id: string; class: string; reasons: Reason[] };
 export type Alt = {
+	profile?: string;
+	metrics?: Facts["metrics"];
+	cascade?: { cause: string; effect: string }[];
+	facts?: Facts;
 	solver: { status: string; time_ms: number };
 	plan: Row[];
 	unscheduled: { train_id: string; reason: string }[];

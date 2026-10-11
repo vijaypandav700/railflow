@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import type { createApi } from "../api/client";
+import { compareFacts, explainAlt } from "../nl/explain";
 import type { NewEvent, Reason } from "../sim/logic";
 import { useSimulation } from "../sim/useSimulation";
 import { Gantt } from "./Gantt";
@@ -18,6 +19,9 @@ function why(r: Reason): string {
 
 export function SimulationPanel({ api, scenario }: Props) {
 	const sim = useSimulation(api, scenario);
+	const [tab, setTab] = useState(0);
+	const altCount = sim.pending?.replan.alternatives.length ?? 0;
+	const tabIdx = Math.min(tab, Math.max(altCount - 1, 0));
 	const [ai, setAi] = useState(loadSettings);
 	const [kind, setKind] = useState<"delay" | "closure">("delay");
 	const [trainId, setTrainId] = useState(scenario.trains[0]?.id ?? "");
@@ -41,7 +45,7 @@ export function SimulationPanel({ api, scenario }: Props) {
 		),
 	];
 	const alt = sim.pending
-		? (sim.pending.replan.alternatives[0] ??
+		? (sim.pending.replan.alternatives[tabIdx] ??
 			sim.pending.replan.rejected_plans[0])
 		: undefined;
 	const offered = (sim.pending?.replan.alternatives.length ?? 0) > 0;
@@ -238,6 +242,41 @@ export function SimulationPanel({ api, scenario }: Props) {
 			{sim.pending && alt ? (
 				<div data-testid="review">
 					<h3>Review revision (nothing applies until you accept)</h3>
+					<div role="tablist" className="flex gap-2">
+						{sim.pending.replan.alternatives.map((a, i) => (
+							<button
+								key={a.profile ?? `alt-${i}`}
+								type="button"
+								role="tab"
+								aria-selected={i === tabIdx}
+								onClick={() => setTab(i)}
+							>
+								{a.profile ?? `option ${i + 1}`}
+							</button>
+						))}
+					</div>
+					{alt?.facts ? (
+						<p data-testid="tradeoff">{explainAlt(alt.facts)}</p>
+					) : null}
+					{compareFacts(
+						sim.pending.replan.alternatives.flatMap((a) =>
+							a.facts ? [a.facts] : [],
+						),
+					) ? (
+						<p data-testid="compare">
+							{compareFacts(
+								sim.pending.replan.alternatives.flatMap((a) =>
+									a.facts ? [a.facts] : [],
+								),
+							)}
+						</p>
+					) : null}
+					{alt?.cascade && alt.cascade.length > 0 ? (
+						<p data-testid="cascade">
+							Cascade:{" "}
+							{alt.cascade.map((e) => `${e.cause} → ${e.effect}`).join(", ")}
+						</p>
+					) : null}
 					<p>
 						{offered ? "VALID" : "INVALID (rejected)"} · {alt.solver.status} ·{" "}
 						{alt.solver.time_ms} ms
@@ -272,7 +311,14 @@ export function SimulationPanel({ api, scenario }: Props) {
 						</tbody>
 					</table>
 					<div className="flex gap-2">
-						<button type="button" disabled={!offered} onClick={sim.accept}>
+						<button
+							type="button"
+							disabled={!offered}
+							onClick={() => {
+								sim.accept(tabIdx);
+								setTab(0);
+							}}
+						>
 							Accept this revision
 						</button>
 						<button type="button" onClick={sim.reject}>

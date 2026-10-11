@@ -132,31 +132,34 @@ export function useSimulation(api: Api, scenario: Scenario) {
 		[clock, addLog],
 	);
 
-	const accept = useCallback(() => {
-		if (!pending) return;
-		const alt = pending.replan.alternatives[0];
-		if (!alt) return;
-		const twin = validate({
-			station: scenario.station,
-			trains: scenario.trains,
-			delays: pending.delays,
-			closures: pending.closures,
-			now: clock,
-			plan: alt.plan,
-			unscheduled: alt.unscheduled,
-			previous_plan: plan,
-			diff: alt.diff,
-		});
-		if (!alt.validation.valid || !twin.valid) {
-			addLog(clock, "Refused to apply: failed validation", "warn");
-			return;
-		}
-		setPlan(alt.plan);
-		setUnscheduled(alt.unscheduled);
-		setCommitted({ delays: pending.delays, closures: pending.closures });
-		setPending(null);
-		addLog(clock, "Accepted revision", "ok");
-	}, [pending, scenario, plan, clock, addLog]);
+	const accept = useCallback(
+		(index = 0) => {
+			if (!pending) return;
+			const alt = pending.replan.alternatives[index];
+			if (!alt) return;
+			const twin = validate({
+				station: scenario.station,
+				trains: scenario.trains,
+				delays: pending.delays,
+				closures: pending.closures,
+				now: clock,
+				plan: alt.plan,
+				unscheduled: alt.unscheduled,
+				previous_plan: plan,
+				diff: alt.diff,
+			});
+			if (!alt.validation.valid || !twin.valid) {
+				addLog(clock, "Refused to apply: failed validation", "warn");
+				return;
+			}
+			setPlan(alt.plan);
+			setUnscheduled(alt.unscheduled);
+			setCommitted({ delays: pending.delays, closures: pending.closures });
+			setPending(null);
+			addLog(clock, "Accepted revision", "ok");
+		},
+		[pending, scenario, plan, clock, addLog],
+	);
 
 	const reject = useCallback(() => {
 		setPending(null);
