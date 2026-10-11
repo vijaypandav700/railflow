@@ -18,7 +18,7 @@ W_MOVE = 1_000
 # profile -> (delay weight, move weight)
 PROFILES: dict[str, tuple[int, int]] = {
     "min_change": (W_DELAY, W_MOVE),
-    "min_delay": (100, 50),
+    "min_delay": (100, 20),
 }
 
 
@@ -102,6 +102,19 @@ def replan(data: Json, time_limit: float = 5.0, profile: str = "min_change") -> 
     arrs: dict[str, Any] = {}
     deps: dict[str, Any] = {}
     terms: list[Any] = []
+    hint: dict[str, Json] = {}
+    hint_rows: list[Json] = []
+    hint_skipped: list[Json] = []
+    try:
+        from railflow.baselines import run_baseline
+
+        start_plan = run_baseline(data, "first_fit")
+        if start_plan["validation"]["valid"]:
+            hint = {r["train_id"]: r for r in start_plan["plan"]}
+            hint_rows = list(start_plan["plan"])
+            hint_skipped = list(start_plan["unscheduled"])
+    except (KeyError, TypeError, ValueError):
+        hint = {}
 
     for t in trains:
         tid: str = t["id"]
@@ -133,6 +146,15 @@ def replan(data: Json, time_limit: float = 5.0, profile: str = "min_change") -> 
             moved = 1 if home is not None and p != home else 0
             terms.append(lit * (w_move * moved + index))
         skip = model.new_bool_var(f"u_{tid}")
+        h = hint.get(tid)
+        if h is not None:
+            h_arr, h_dep = int(h["arr"]), int(h["dep"])
+            model.add_hint(arr, h_arr)
+            model.add_hint(dep, h_dep)
+            model.add_hint(size, h_dep + gap - h_arr)
+            model.add_hint(skip, 0)
+            for hp, hlit in lits[tid]:
+                model.add_hint(hlit, 1 if hp == h["platform"] else 0)
         model.add_exactly_one([lit for _, lit in lits[tid]] + [skip])
         terms.append(skip * (W_UNSCHED * weight))
         terms.append(w_delay * weight * (arr + dep - sched_arr - sched_dep))
@@ -174,6 +196,29 @@ def replan(data: Json, time_limit: float = 5.0, profile: str = "min_change") -> 
                     "dep": solver.Value(deps[tid]),
                 }
             )
+
+    def score(rows: list[Json], skips: list[Json]) -> int:
+        by_id = {r["train_id"]: r for r in rows}
+        total = 0
+        for t in trains:
+            tid = t["id"]
+            if tid in frozen:
+                continue
+            weight = CLASS_WEIGHT.get(str(t.get("class", "local")), 1)
+            r = by_id.get(tid)
+            if r is None:
+                total += W_UNSCHED * weight
+                continue
+            home = prev.get(tid, {}).get("platform", t.get("platform"))
+            moved = 1 if home is not None and r["platform"] != home else 0
+            late = int(r["arr"]) + int(r["dep"]) - int(t["arr"]) - int(t["dep"])
+            total += w_move * moved + platforms.index(r["platform"]) + w_delay * weight * late
+        return total
+
+    if hint_rows and score(hint_rows, hint_skipped) < score(plan, skipped):
+        plan = [dict(r) for r in hint_rows]
+        skipped = list(hint_skipped)
+        status = cp_model.FEASIBLE
     plan.sort(key=lambda r: (r["arr"], r["train_id"]))
     label = "OPTIMAL" if status == cp_model.OPTIMAL else "FEASIBLE"
     return {
