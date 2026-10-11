@@ -7,8 +7,13 @@ from railflow.validator import validate
 
 SCENARIO_DIR = Path(__file__).parents[3] / "scenarios"
 FILES = sorted(SCENARIO_DIR.glob("S0[1-6]-*.json"))
-CLEAN = ["S01-clean-day", "S03-single-delay", "S04-midday-closure",
-         "S05-delay-plus-closure", "S06-rush-hour"]
+CLEAN = [
+    "S01-clean-day",
+    "S03-single-delay",
+    "S04-midday-closure",
+    "S05-delay-plus-closure",
+    "S06-rush-hour",
+]
 
 
 def load(stem: str) -> Scenario:
@@ -26,20 +31,33 @@ def validator_input(scenario: Scenario, *, disrupted: bool) -> dict[str, Any]:
             "closure_buffer": station.closure_buffer,
         },
         "trains": [
-            {"id": t.id, "class": t.train_class, "arr": t.arr, "dep": t.dep,
-             "required_platform": t.required_platform, "platform": t.platform}
+            {
+                "id": t.id,
+                "class": t.train_class,
+                "arr": t.arr,
+                "dep": t.dep,
+                "required_platform": t.required_platform,
+                "platform": t.platform,
+            }
             for t in scenario.trains
         ],
         "delays": [{"train_id": d.train_id, "minutes": d.minutes} for d in scenario.delays]
-        if disrupted else [],
-        "closures": [{"id": c.id, "platform": c.platform, "start": c.start, "end": c.end}
-                     for c in scenario.closures]
-        if disrupted else [],
+        if disrupted
+        else [],
+        "closures": [
+            {"id": c.id, "platform": c.platform, "start": c.start, "end": c.end}
+            for c in scenario.closures
+        ]
+        if disrupted
+        else [],
         "now": scenario.now,
         "previous_plan": None,
         "diff": None,
-        "plan": [{"train_id": t.id, "platform": t.platform, "arr": t.arr, "dep": t.dep}
-                 for t in scenario.trains if t.platform is not None],
+        "plan": [
+            {"train_id": t.id, "platform": t.platform, "arr": t.arr, "dep": t.dep}
+            for t in scenario.trains
+            if t.platform is not None
+        ],
         "unscheduled": [],
     }
 
@@ -51,8 +69,12 @@ def errors(scenario: Scenario, check_id: str, *, disrupted: bool = False) -> lis
 
 def test_six_files_exist() -> None:
     assert [f.stem for f in FILES] == [
-        "S01-clean-day", "S02-injected-conflicts", "S03-single-delay",
-        "S04-midday-closure", "S05-delay-plus-closure", "S06-rush-hour",
+        "S01-clean-day",
+        "S02-injected-conflicts",
+        "S03-single-delay",
+        "S04-midday-closure",
+        "S05-delay-plus-closure",
+        "S06-rush-hour",
     ]
 
 
@@ -66,8 +88,17 @@ def test_file_loads_and_roundtrips(path: Path) -> None:
 
 def test_shapes() -> None:
     s01, s02, s03 = load("S01-clean-day"), load("S02-injected-conflicts"), load("S03-single-delay")
-    s04, s05, s06 = load("S04-midday-closure"), load("S05-delay-plus-closure"), load("S06-rush-hour")
-    assert (len(s01.trains), len(s01.station.platforms), s01.delays, s01.closures) == (12, 4, [], [])
+    s04, s05, s06 = (
+        load("S04-midday-closure"),
+        load("S05-delay-plus-closure"),
+        load("S06-rush-hour"),
+    )
+    assert (len(s01.trains), len(s01.station.platforms), s01.delays, s01.closures) == (
+        12,
+        4,
+        [],
+        [],
+    )
     assert (len(s02.trains), len(s02.station.platforms)) == (8, 3)
     assert (len(s03.delays), len(s03.closures)) == (1, 0)
     assert (len(s04.delays), len(s04.closures)) == (0, 1)

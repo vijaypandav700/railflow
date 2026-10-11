@@ -143,7 +143,5 @@ class Scenario(BaseModel):
                 raise ValueError(f"duplicate closure id {closure.id!r}")
             closure_ids.add(closure.id)
             if closure.platform not in known:
-                raise ValueError(
-                    f"closure {closure.id}: unknown platform {closure.platform!r}"
-                )
+                raise ValueError(f"closure {closure.id}: unknown platform {closure.platform!r}")
         return self
