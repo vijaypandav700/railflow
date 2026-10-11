@@ -27,7 +27,7 @@ def test_replan_returns_valid_alternative() -> None:
     res = client.post("/api/replan", json=body())
     assert res.status_code == 200
     out = res.json()
-    assert len(out["alternatives"]) == 1
+    assert len(out["alternatives"]) >= 1
     assert out["rejected_plans"] == []
     alt = out["alternatives"][0]
     assert alt["validation"]["valid"] is True
@@ -50,7 +50,7 @@ def test_limit_exceeded() -> None:
 
 
 def test_invalid_plan_goes_to_rejected(monkeypatch: pytest.MonkeyPatch) -> None:
-    def fake(_data: dict[str, Any]) -> dict[str, Any]:
+    def fake(_data: dict[str, Any], time_limit: float = 5.0, profile: str = "x") -> dict[str, Any]:
         return {
             "status": "OPTIMAL",
             "plan": [

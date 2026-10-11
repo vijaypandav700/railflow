@@ -6,6 +6,7 @@ from typing import Any
 from fastapi import FastAPI, HTTPException
 from railflow import __version__
 from railflow.detector import detect
+from railflow.insights import build_cascade, build_facts, compute_metrics
 from railflow.planfile import load_plan_file
 from railflow.reasons import replan_with_diff
 from railflow.validator import validate
@@ -49,14 +50,19 @@ def api_replan(body: dict[str, Any]) -> dict[str, Any]:
                     "message": "200 trains, 12 platforms, 20 disruptions max",
                 },
             )
-        start = time.perf_counter()
-        out = replan_with_diff(body)
-        elapsed = int((time.perf_counter() - start) * 1000)
+        names: list[str] = list(body.get("profiles") or ["min_change", "min_delay"])
+        solved: list[tuple[str, dict[str, Any], int]] = []
+        for name in names:
+            start = time.perf_counter()
+            result = replan_with_diff(body, profile=name)
+            elapsed = int((time.perf_counter() - start) * 1000)
+            if result["status"] in ("OPTIMAL", "FEASIBLE"):
+                solved.append((name, result, elapsed))
     except (KeyError, TypeError, ValueError) as exc:
         raise HTTPException(
             status_code=422, detail={"code": "INPUT_MALFORMED", "message": str(exc)}
         ) from exc
-    if out["status"] not in ("OPTIMAL", "FEASIBLE"):
+    if not solved:
         raise HTTPException(
             status_code=422,
             detail={
@@ -64,26 +70,43 @@ def api_replan(body: dict[str, Any]) -> dict[str, Any]:
                 "message": "No valid plan exists for these disruptions",
             },
         )
-    validation = validate(
-        {
-            **body,
+    good: list[dict[str, Any]] = []
+    bad: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for name, out, elapsed in solved:
+        signature = repr(
+            (
+                sorted((r["train_id"], r["platform"], r["arr"], r["dep"]) for r in out["plan"]),
+                sorted(u["train_id"] for u in out["unscheduled"]),
+            )
+        )
+        if signature in seen:
+            continue
+        seen.add(signature)
+        validation = validate(
+            {
+                **body,
+                "plan": out["plan"],
+                "unscheduled": out["unscheduled"],
+                "previous_plan": out["previous_plan"],
+                "diff": out["diff"],
+            }
+        )
+        metrics = compute_metrics(body, out)
+        alt: dict[str, Any] = {
+            "profile": name,
+            "solver": {"status": out["status"], "time_ms": elapsed},
             "plan": out["plan"],
             "unscheduled": out["unscheduled"],
-            "previous_plan": out["previous_plan"],
+            "warnings": out["warnings"],
             "diff": out["diff"],
+            "metrics": metrics,
+            "cascade": build_cascade(out["diff"]),
+            "facts": build_facts(name, out["diff"], metrics),
+            "validation": validation,
         }
-    )
-    alt: dict[str, Any] = {
-        "profile": "default",
-        "solver": {"status": out["status"], "time_ms": elapsed},
-        "plan": out["plan"],
-        "unscheduled": out["unscheduled"],
-        "warnings": out["warnings"],
-        "diff": out["diff"],
-        "validation": validation,
-    }
-    ok = bool(validation["valid"])
-    return {"alternatives": [alt] if ok else [], "rejected_plans": [] if ok else [alt]}
+        (good if validation["valid"] else bad).append(alt)
+    return {"alternatives": good, "rejected_plans": bad}
 
 
 def _scenario_files() -> dict[str, Path]:
