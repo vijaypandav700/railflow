@@ -2,6 +2,7 @@ import { validate } from "@railflow/validator";
 import { useEffect, useMemo, useState } from "react";
 import type { createApi } from "../api/client";
 import { Gantt, Legend } from "./Gantt";
+import { ImportExport } from "./ImportExport";
 import { SimulationPanel } from "./SimulationPanel";
 import type { Scenario } from "./types";
 
@@ -12,6 +13,7 @@ export function PlanScreen({ api }: Props) {
 	const [selected, setSelected] = useState("");
 	const [scenario, setScenario] = useState<Scenario | null>(null);
 	const [error, setError] = useState("");
+	const [rev, setRev] = useState(0);
 
 	useEffect(() => {
 		api
@@ -117,7 +119,18 @@ export function PlanScreen({ api }: Props) {
 							</li>
 						))}
 					</ul>
-					<SimulationPanel key={selected} api={api} scenario={scenario} />
+					<ImportExport
+						scenario={scenario}
+						onImport={(next) => {
+							setScenario(next);
+							setRev(rev + 1);
+						}}
+					/>
+					<SimulationPanel
+						key={`${selected}-${rev}`}
+						api={api}
+						scenario={scenario}
+					/>
 				</>
 			) : null}
 		</section>
