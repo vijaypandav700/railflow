@@ -12,6 +12,7 @@
 		"gen:api": "openapi-typescript ../../contracts/openapi.json -o src/api/schema.d.ts"
 	},
 	"dependencies": {
+		"@railflow/validator": "workspace:*",
 		"@tailwindcss/vite": "^4.3.3",
 		"d3-scale": "^4.0.2",
 		"openapi-fetch": "^0.17.0",

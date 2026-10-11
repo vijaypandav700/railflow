@@ -6,6 +6,7 @@ COPY apps/web/package.json apps/web/package.json
 COPY packages/validator-ts/package.json packages/validator-ts/package.json
 RUN pnpm install --frozen-lockfile
 COPY apps/web apps/web
+COPY packages/validator-ts packages/validator-ts
 RUN pnpm --dir apps/web build
 
 FROM caddy:2-alpine
