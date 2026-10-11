@@ -1,0 +1,55 @@
+{
+  "id": "S10-past-midnight",
+  "station": {
+    "name": "Vortexa Junction",
+    "gap": 5,
+    "platforms": [
+      "P1",
+      "P2",
+      "P3",
+      "P4"
+    ],
+    "defaults": {
+      "dwell_min": 2,
+      "max_hold": 120,
+      "closure_buffer": 5
+    }
+  },
+  "trains": [
+    {
+      "id": "T101A",
+      "class": "local",
+      "arr": "23:40",
+      "dep": "23:55",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T102A",
+      "class": "local",
+      "arr": "23:50",
+      "dep": "00:10+1d",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T103A",
+      "class": "local",
+      "arr": "00:05+1d",
+      "dep": "00:20+1d",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T104A",
+      "class": "local",
+      "arr": "01:00+1d",
+      "dep": "01:15+1d",
+      "required_platform": null,
+      "platform": "P2"
+    }
+  ],
+  "now": "23:30",
+  "delays": [],
+  "closures": []
+}

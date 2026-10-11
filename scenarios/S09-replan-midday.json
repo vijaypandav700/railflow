@@ -1,0 +1,67 @@
+{
+  "id": "S09-replan-midday",
+  "station": {
+    "name": "Vortexa Junction",
+    "gap": 5,
+    "platforms": [
+      "P1",
+      "P2",
+      "P3",
+      "P4"
+    ],
+    "defaults": {
+      "dwell_min": 2,
+      "max_hold": 120,
+      "closure_buffer": 5
+    }
+  },
+  "trains": [
+    {
+      "id": "T901",
+      "class": "local",
+      "arr": "10:05",
+      "dep": "10:25",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T902",
+      "class": "local",
+      "arr": "10:10",
+      "dep": "10:30",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T903",
+      "class": "local",
+      "arr": "10:20",
+      "dep": "10:40",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T904",
+      "class": "local",
+      "arr": "10:30",
+      "dep": "10:50",
+      "required_platform": null,
+      "platform": "P2"
+    }
+  ],
+  "now": "10:15",
+  "delays": [
+    {
+      "train_id": "T903",
+      "minutes": 15
+    }
+  ],
+  "closures": [
+    {
+      "id": "C1",
+      "platform": "P3",
+      "start": "10:40",
+      "end": "11:40"
+    }
+  ]
+}

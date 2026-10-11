@@ -1,0 +1,54 @@
+{
+  "id": "S11-closure-under-train",
+  "station": {
+    "name": "Vortexa Junction",
+    "gap": 5,
+    "platforms": [
+      "P1",
+      "P2",
+      "P3",
+      "P4"
+    ],
+    "defaults": {
+      "dwell_min": 2,
+      "max_hold": 120,
+      "closure_buffer": 5
+    }
+  },
+  "trains": [
+    {
+      "id": "T111",
+      "class": "local",
+      "arr": "10:00",
+      "dep": "10:30",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T112",
+      "class": "local",
+      "arr": "10:40",
+      "dep": "10:55",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T113",
+      "class": "local",
+      "arr": "10:10",
+      "dep": "10:25",
+      "required_platform": null,
+      "platform": "P2"
+    }
+  ],
+  "now": "10:10",
+  "delays": [],
+  "closures": [
+    {
+      "id": "C1",
+      "platform": "P1",
+      "start": "10:20",
+      "end": "11:40"
+    }
+  ]
+}

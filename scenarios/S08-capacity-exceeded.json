@@ -1,0 +1,90 @@
+{
+  "id": "S08-capacity-exceeded",
+  "station": {
+    "name": "Vortexa Junction",
+    "gap": 5,
+    "platforms": [
+      "P1",
+      "P2",
+      "P3",
+      "P4"
+    ],
+    "defaults": {
+      "dwell_min": 2,
+      "max_hold": 120,
+      "closure_buffer": 5
+    }
+  },
+  "trains": [
+    {
+      "id": "T801",
+      "class": "local",
+      "arr": "10:02",
+      "dep": "10:17",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T802",
+      "class": "local",
+      "arr": "10:04",
+      "dep": "10:19",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T803",
+      "class": "local",
+      "arr": "10:06",
+      "dep": "10:21",
+      "required_platform": null,
+      "platform": "P4"
+    },
+    {
+      "id": "T804",
+      "class": "local",
+      "arr": "10:08",
+      "dep": "10:23",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T805",
+      "class": "local",
+      "arr": "10:10",
+      "dep": "10:25",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T806",
+      "class": "local",
+      "arr": "10:12",
+      "dep": "10:27",
+      "required_platform": null,
+      "platform": "P3"
+    }
+  ],
+  "now": "09:50",
+  "delays": [],
+  "closures": [
+    {
+      "id": "C1",
+      "platform": "P2",
+      "start": "09:30",
+      "end": "11:40"
+    },
+    {
+      "id": "C2",
+      "platform": "P3",
+      "start": "09:30",
+      "end": "11:40"
+    },
+    {
+      "id": "C3",
+      "platform": "P4",
+      "start": "09:30",
+      "end": "11:40"
+    }
+  ]
+}

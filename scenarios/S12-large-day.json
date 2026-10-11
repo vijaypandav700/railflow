@@ -1,0 +1,505 @@
+{
+  "id": "S12-large-day",
+  "station": {
+    "name": "Vortexa Junction",
+    "gap": 5,
+    "platforms": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6"
+    ],
+    "defaults": {
+      "dwell_min": 2,
+      "max_hold": 120,
+      "closure_buffer": 5
+    }
+  },
+  "trains": [
+    {
+      "id": "T1200",
+      "class": "express",
+      "arr": "17:05",
+      "dep": "17:17",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T1201",
+      "class": "express",
+      "arr": "15:30",
+      "dep": "15:38",
+      "required_platform": null,
+      "platform": "P4"
+    },
+    {
+      "id": "T1202",
+      "class": "local",
+      "arr": "13:40",
+      "dep": "13:55",
+      "required_platform": null,
+      "platform": "P5"
+    },
+    {
+      "id": "T1203",
+      "class": "premium",
+      "arr": "09:01",
+      "dep": "09:11",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T1204",
+      "class": "local",
+      "arr": "11:46",
+      "dep": "11:59",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T1205",
+      "class": "express",
+      "arr": "12:24",
+      "dep": "12:33",
+      "required_platform": null,
+      "platform": "P6"
+    },
+    {
+      "id": "T1206",
+      "class": "local",
+      "arr": "15:54",
+      "dep": "16:03",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T1207",
+      "class": "local",
+      "arr": "17:41",
+      "dep": "17:52",
+      "required_platform": null,
+      "platform": "P4"
+    },
+    {
+      "id": "T1208",
+      "class": "premium",
+      "arr": "16:34",
+      "dep": "16:43",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T1209",
+      "class": "local",
+      "arr": "14:20",
+      "dep": "14:30",
+      "required_platform": null,
+      "platform": "P5"
+    },
+    {
+      "id": "T1210",
+      "class": "premium",
+      "arr": "11:55",
+      "dep": "12:04",
+      "required_platform": null,
+      "platform": "P5"
+    },
+    {
+      "id": "T1211",
+      "class": "premium",
+      "arr": "16:08",
+      "dep": "16:23",
+      "required_platform": null,
+      "platform": "P5"
+    },
+    {
+      "id": "T1212",
+      "class": "local",
+      "arr": "15:33",
+      "dep": "15:41",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T1213",
+      "class": "express",
+      "arr": "13:27",
+      "dep": "13:40",
+      "required_platform": null,
+      "platform": "P6"
+    },
+    {
+      "id": "T1214",
+      "class": "local",
+      "arr": "15:34",
+      "dep": "15:46",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T1215",
+      "class": "express",
+      "arr": "13:00",
+      "dep": "13:13",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T1216",
+      "class": "local",
+      "arr": "17:43",
+      "dep": "17:53",
+      "required_platform": null,
+      "platform": "P4"
+    },
+    {
+      "id": "T1217",
+      "class": "local",
+      "arr": "16:20",
+      "dep": "16:28",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T1218",
+      "class": "premium",
+      "arr": "16:17",
+      "dep": "16:25",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T1219",
+      "class": "local",
+      "arr": "10:45",
+      "dep": "10:56",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T1220",
+      "class": "premium",
+      "arr": "13:40",
+      "dep": "13:48",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T1221",
+      "class": "local",
+      "arr": "17:30",
+      "dep": "17:43",
+      "required_platform": null,
+      "platform": "P5"
+    },
+    {
+      "id": "T1222",
+      "class": "local",
+      "arr": "16:50",
+      "dep": "17:03",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T1223",
+      "class": "premium",
+      "arr": "13:48",
+      "dep": "14:03",
+      "required_platform": null,
+      "platform": "P6"
+    },
+    {
+      "id": "T1224",
+      "class": "local",
+      "arr": "17:12",
+      "dep": "17:23",
+      "required_platform": null,
+      "platform": "P4"
+    },
+    {
+      "id": "T1225",
+      "class": "local",
+      "arr": "15:12",
+      "dep": "15:22",
+      "required_platform": null,
+      "platform": "P6"
+    },
+    {
+      "id": "T1226",
+      "class": "express",
+      "arr": "12:45",
+      "dep": "12:53",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T1227",
+      "class": "local",
+      "arr": "12:03",
+      "dep": "12:14",
+      "required_platform": null,
+      "platform": "P5"
+    },
+    {
+      "id": "T1228",
+      "class": "local",
+      "arr": "09:40",
+      "dep": "09:51",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T1229",
+      "class": "local",
+      "arr": "17:35",
+      "dep": "17:45",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T1230",
+      "class": "local",
+      "arr": "13:46",
+      "dep": "13:55",
+      "required_platform": null,
+      "platform": "P5"
+    },
+    {
+      "id": "T1231",
+      "class": "premium",
+      "arr": "17:34",
+      "dep": "17:49",
+      "required_platform": null,
+      "platform": "P6"
+    },
+    {
+      "id": "T1232",
+      "class": "premium",
+      "arr": "15:02",
+      "dep": "15:14",
+      "required_platform": null,
+      "platform": "P6"
+    },
+    {
+      "id": "T1233",
+      "class": "express",
+      "arr": "11:46",
+      "dep": "12:01",
+      "required_platform": null,
+      "platform": "P5"
+    },
+    {
+      "id": "T1234",
+      "class": "express",
+      "arr": "09:47",
+      "dep": "09:59",
+      "required_platform": null,
+      "platform": "P5"
+    },
+    {
+      "id": "T1235",
+      "class": "express",
+      "arr": "16:35",
+      "dep": "16:46",
+      "required_platform": null,
+      "platform": "P5"
+    },
+    {
+      "id": "T1236",
+      "class": "local",
+      "arr": "13:21",
+      "dep": "13:29",
+      "required_platform": null,
+      "platform": "P6"
+    },
+    {
+      "id": "T1237",
+      "class": "express",
+      "arr": "09:27",
+      "dep": "09:37",
+      "required_platform": null,
+      "platform": "P4"
+    },
+    {
+      "id": "T1238",
+      "class": "local",
+      "arr": "11:21",
+      "dep": "11:32",
+      "required_platform": null,
+      "platform": "P4"
+    },
+    {
+      "id": "T1239",
+      "class": "express",
+      "arr": "17:03",
+      "dep": "17:11",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T1240",
+      "class": "local",
+      "arr": "16:07",
+      "dep": "16:21",
+      "required_platform": null,
+      "platform": "P4"
+    },
+    {
+      "id": "T1241",
+      "class": "express",
+      "arr": "12:23",
+      "dep": "12:36",
+      "required_platform": null,
+      "platform": "P6"
+    },
+    {
+      "id": "T1242",
+      "class": "local",
+      "arr": "15:34",
+      "dep": "15:44",
+      "required_platform": null,
+      "platform": "P6"
+    },
+    {
+      "id": "T1243",
+      "class": "local",
+      "arr": "11:39",
+      "dep": "11:47",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T1244",
+      "class": "premium",
+      "arr": "16:05",
+      "dep": "16:16",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T1245",
+      "class": "express",
+      "arr": "15:01",
+      "dep": "15:12",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T1246",
+      "class": "local",
+      "arr": "17:23",
+      "dep": "17:32",
+      "required_platform": null,
+      "platform": "P5"
+    },
+    {
+      "id": "T1247",
+      "class": "local",
+      "arr": "15:43",
+      "dep": "15:54",
+      "required_platform": null,
+      "platform": "P4"
+    },
+    {
+      "id": "T1248",
+      "class": "local",
+      "arr": "15:04",
+      "dep": "15:17",
+      "required_platform": null,
+      "platform": "P6"
+    },
+    {
+      "id": "T1249",
+      "class": "local",
+      "arr": "14:40",
+      "dep": "14:50",
+      "required_platform": null,
+      "platform": "P6"
+    },
+    {
+      "id": "T1250",
+      "class": "local",
+      "arr": "14:19",
+      "dep": "14:31",
+      "required_platform": null,
+      "platform": "P6"
+    },
+    {
+      "id": "T1251",
+      "class": "local",
+      "arr": "16:26",
+      "dep": "16:39",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T1252",
+      "class": "premium",
+      "arr": "12:34",
+      "dep": "12:49",
+      "required_platform": null,
+      "platform": "P4"
+    },
+    {
+      "id": "T1253",
+      "class": "express",
+      "arr": "12:03",
+      "dep": "12:11",
+      "required_platform": null,
+      "platform": "P4"
+    },
+    {
+      "id": "T1254",
+      "class": "local",
+      "arr": "13:04",
+      "dep": "13:17",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T1255",
+      "class": "express",
+      "arr": "09:07",
+      "dep": "09:20",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T1256",
+      "class": "express",
+      "arr": "12:26",
+      "dep": "12:40",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T1257",
+      "class": "express",
+      "arr": "17:48",
+      "dep": "17:58",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T1258",
+      "class": "premium",
+      "arr": "17:32",
+      "dep": "17:47",
+      "required_platform": null,
+      "platform": "P5"
+    },
+    {
+      "id": "T1259",
+      "class": "premium",
+      "arr": "17:32",
+      "dep": "17:43",
+      "required_platform": null,
+      "platform": "P4"
+    }
+  ],
+  "now": "08:55",
+  "delays": [],
+  "closures": []
+}

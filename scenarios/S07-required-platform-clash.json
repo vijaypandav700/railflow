@@ -1,0 +1,47 @@
+{
+  "id": "S07-required-platform-clash",
+  "station": {
+    "name": "Vortexa Junction",
+    "gap": 5,
+    "platforms": [
+      "P1",
+      "P2",
+      "P3",
+      "P4"
+    ],
+    "defaults": {
+      "dwell_min": 2,
+      "max_hold": 120,
+      "closure_buffer": 5
+    }
+  },
+  "trains": [
+    {
+      "id": "T701",
+      "class": "local",
+      "arr": "10:00",
+      "dep": "10:15",
+      "required_platform": "P1",
+      "platform": "P1"
+    },
+    {
+      "id": "T702",
+      "class": "local",
+      "arr": "10:08",
+      "dep": "10:20",
+      "required_platform": "P1",
+      "platform": "P1"
+    },
+    {
+      "id": "T703",
+      "class": "local",
+      "arr": "10:10",
+      "dep": "10:25",
+      "required_platform": null,
+      "platform": "P2"
+    }
+  ],
+  "now": "09:50",
+  "delays": [],
+  "closures": []
+}
