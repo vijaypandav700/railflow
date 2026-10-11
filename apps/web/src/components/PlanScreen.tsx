@@ -2,7 +2,7 @@ import { validate } from "@railflow/validator";
 import { useEffect, useMemo, useState } from "react";
 import type { createApi } from "../api/client";
 import { DisruptPanel } from "./DisruptPanel";
-import { Gantt } from "./Gantt";
+import { Gantt, Legend } from "./Gantt";
 import type { Scenario } from "./types";
 
 type Props = { api: ReturnType<typeof createApi> };
@@ -35,6 +35,16 @@ export function PlanScreen({ api }: Props) {
 			)
 			.catch((e: unknown) => setError(String(e)));
 	}, [api, selected]);
+	const classes = useMemo(
+		() =>
+			Object.fromEntries(
+				(scenario?.trains ?? []).map((t) => [
+					t.id,
+					(t as { class?: string }).class ?? "local",
+				]),
+			),
+		[scenario],
+	);
 
 	const view = useMemo(() => {
 		if (!scenario) return null;
@@ -90,12 +100,15 @@ export function PlanScreen({ api }: Props) {
 							? "VALID: no conflicts"
 							: `INVALID: ${view.errors.length} problem(s)`}
 					</p>
+					<Legend />
 					<Gantt
 						platforms={scenario.station.platforms}
 						rows={view.rows}
 						closures={scenario.closures}
 						gap={scenario.station.gap}
 						conflicts={view.conflicts}
+						classes={classes}
+						now={scenario.now}
 					/>
 					<ul data-testid="conflicts">
 						{view.errors.map((e) => (
