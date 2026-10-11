@@ -1,0 +1,1 @@
+export const CLASS_WEIGHT = { local: 1, express: 3, premium: 5 };
