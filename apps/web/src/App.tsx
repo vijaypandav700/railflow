@@ -1,4 +1,5 @@
 import { createApi } from "./api/client";
+import { AuditPanel } from "./components/AuditPanel";
 import { PlanScreen } from "./components/PlanScreen";
 import { ThemeToggle } from "./components/ThemeToggle";
 
@@ -17,6 +18,7 @@ export default function App({ api = defaultApi }: Props) {
 				<ThemeToggle />
 			</header>
 			<PlanScreen api={api} />
+			<AuditPanel />
 		</main>
 	);
 }
