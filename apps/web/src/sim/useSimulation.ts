@@ -42,8 +42,8 @@ export function useSimulation(api: Api, scenario: Scenario) {
 		delays: Delay[];
 		closures: Closure[];
 	}>({
-		delays: scenario.delays,
-		closures: scenario.closures,
+		delays: [],
+		closures: [],
 	});
 	const [queue, setQueue] = useState<SimEvent[]>([]);
 	const [pending, setPending] = useState<Pending | null>(null);
