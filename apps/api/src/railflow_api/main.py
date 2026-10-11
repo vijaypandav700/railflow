@@ -58,7 +58,11 @@ def api_replan(body: dict[str, Any]) -> dict[str, Any]:
         ) from exc
     if out["status"] not in ("OPTIMAL", "FEASIBLE"):
         raise HTTPException(
-            status_code=500, detail={"code": "SOLVER_FAILED", "message": str(out["status"])}
+            status_code=422,
+            detail={
+                "code": "INPUT_INFEASIBLE",
+                "message": "No valid plan exists for these disruptions",
+            },
         )
     validation = validate(
         {
