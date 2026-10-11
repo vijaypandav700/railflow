@@ -3,6 +3,7 @@ import type { createApi } from "../api/client";
 import type { NewEvent, Reason } from "../sim/logic";
 import { useSimulation } from "../sim/useSimulation";
 import { Gantt } from "./Gantt";
+import { NlBox } from "./NlBox";
 import { fmt, parseTime } from "./time";
 import type { Scenario } from "./types";
 import { ValidatorPanel } from "./ValidatorPanel";
@@ -127,6 +128,13 @@ export function SimulationPanel({ api, scenario }: Props) {
 
 			<ValidatorPanel result={sim.live} />
 
+			<NlBox
+				ctx={{ trains: scenario.trains, platforms: scenario.station.platforms }}
+				disabled={sim.busy || !!sim.pending}
+				onConfirm={(events) => {
+					for (const ev of events) sim.schedule(ev, sim.clock);
+				}}
+			/>
 			<h3>Inject disruption</h3>
 			<div className="flex flex-wrap items-center gap-2">
 				<label>
