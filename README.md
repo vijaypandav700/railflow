@@ -43,6 +43,12 @@ Open http://localhost:5173. API docs at http://localhost:8000/api/docs.
     pnpm --dir apps/web test
     pnpm --dir packages/validator-ts test
 
+End-to-end (stack must be running on port 8080):
+
+    docker compose up -d --build
+    cd e2e && pnpm install --ignore-workspace && pnpm exec playwright install chromium
+    pnpm exec playwright test
+
 Long evidence runs:
 
     FUZZ_N=10000 uv run pytest packages/engine/tests/test_fuzz.py -q
