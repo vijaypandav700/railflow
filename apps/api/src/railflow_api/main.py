@@ -5,6 +5,7 @@ from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from railflow import __version__
+from railflow.benchmark import compare
 from railflow.detector import detect
 from railflow.insights import build_cascade, build_facts, compute_metrics
 from railflow.planfile import load_plan_file
@@ -107,6 +108,21 @@ def api_replan(body: dict[str, Any]) -> dict[str, Any]:
         }
         (good if validation["valid"] else bad).append(alt)
     return {"alternatives": good, "rejected_plans": bad}
+
+
+@app.post("/api/baseline/compare")
+def api_baseline_compare(body: dict[str, Any]) -> dict[str, Any]:
+    try:
+        if len(body["trains"]) > MAX_TRAINS or len(body["station"]["platforms"]) > MAX_PLATFORMS:
+            raise HTTPException(
+                status_code=422,
+                detail={"code": "LIMIT_EXCEEDED", "message": "200 trains, 12 platforms max"},
+            )
+        return compare(body)
+    except (KeyError, TypeError, ValueError) as exc:
+        raise HTTPException(
+            status_code=422, detail={"code": "INPUT_MALFORMED", "message": str(exc)}
+        ) from exc
 
 
 def _scenario_files() -> dict[str, Path]:
