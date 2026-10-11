@@ -1,0 +1,86 @@
+{
+  "id": "S02-injected-conflicts",
+  "station": {
+    "name": "Vortexa Junction",
+    "gap": 5,
+    "platforms": [
+      "P1",
+      "P2",
+      "P3"
+    ],
+    "defaults": {
+      "dwell_min": 2,
+      "max_hold": 120,
+      "closure_buffer": 5
+    }
+  },
+  "trains": [
+    {
+      "id": "T401",
+      "class": "local",
+      "arr": "09:00",
+      "dep": "09:20",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T402",
+      "class": "express",
+      "arr": "09:15",
+      "dep": "09:35",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T403",
+      "class": "local",
+      "arr": "09:37",
+      "dep": "09:50",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T404",
+      "class": "local",
+      "arr": "09:10",
+      "dep": "09:25",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T405",
+      "class": "local",
+      "arr": "09:28",
+      "dep": "09:40",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T406",
+      "class": "local",
+      "arr": "09:00",
+      "dep": "09:15",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T407",
+      "class": "local",
+      "arr": "09:20",
+      "dep": "09:35",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T408",
+      "class": "premium",
+      "arr": "10:00",
+      "dep": "10:10",
+      "required_platform": null,
+      "platform": "P3"
+    }
+  ],
+  "now": "09:00",
+  "delays": [],
+  "closures": []
+}

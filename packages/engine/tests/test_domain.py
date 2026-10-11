@@ -121,3 +121,42 @@ def test_platform_limit() -> None:
     assert len(Scenario.model_validate(data).station.platforms) == MAX_PLATFORMS
     data["station"]["platforms"].append("PX")
     expect_error(data, "at most 12")
+
+
+def test_delays_and_closures_parse() -> None:
+    data = sample()
+    data["delays"] = [{"train_id": "T101", "minutes": 25}]
+    data["closures"] = [{"id": "C1", "platform": "P2", "start": "10:00", "end": "11:30"}]
+    scenario = Scenario.model_validate(data)
+    assert scenario.delays[0].minutes == 25
+    assert scenario.closures[0].start == 600
+    assert scenario.closures[0].end == 690
+
+
+@pytest.mark.parametrize(
+    ("key", "value", "text"),
+    [
+        ("delays", [{"train_id": "T999", "minutes": 5}], "unknown train"),
+        ("delays", [{"train_id": "T101", "minutes": 0}], "greater than or equal to 1"),
+        (
+            "closures",
+            [{"id": "C1", "platform": "P9", "start": "10:00", "end": "11:00"}],
+            "unknown platform",
+        ),
+        (
+            "closures",
+            [{"id": "C1", "platform": "P1", "start": "11:00", "end": "10:00"}],
+            "start must be before end",
+        ),
+        (
+            "closures",
+            [
+                {"id": "C1", "platform": "P1", "start": "10:00", "end": "11:00"},
+                {"id": "C1", "platform": "P2", "start": "10:00", "end": "11:00"},
+            ],
+            "duplicate closure id",
+        ),
+    ],
+)
+def test_rejects_bad_disruptions(key: str, value: Any, text: str) -> None:
+    expect_error(put(sample(), key, value), text)

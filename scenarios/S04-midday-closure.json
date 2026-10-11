@@ -1,0 +1,126 @@
+{
+  "id": "S04-midday-closure",
+  "station": {
+    "name": "Vortexa Junction",
+    "gap": 5,
+    "platforms": [
+      "P1",
+      "P2",
+      "P3",
+      "P4"
+    ],
+    "defaults": {
+      "dwell_min": 2,
+      "max_hold": 120,
+      "closure_buffer": 5
+    }
+  },
+  "trains": [
+    {
+      "id": "T201",
+      "class": "local",
+      "arr": "09:30",
+      "dep": "09:45",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T202",
+      "class": "local",
+      "arr": "09:40",
+      "dep": "09:55",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T203",
+      "class": "local",
+      "arr": "09:50",
+      "dep": "10:05",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T204",
+      "class": "local",
+      "arr": "10:00",
+      "dep": "10:15",
+      "required_platform": null,
+      "platform": "P4"
+    },
+    {
+      "id": "T205",
+      "class": "local",
+      "arr": "10:10",
+      "dep": "10:25",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T206",
+      "class": "express",
+      "arr": "10:15",
+      "dep": "10:30",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T207",
+      "class": "local",
+      "arr": "10:40",
+      "dep": "10:55",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T208",
+      "class": "local",
+      "arr": "10:45",
+      "dep": "11:00",
+      "required_platform": null,
+      "platform": "P4"
+    },
+    {
+      "id": "T209",
+      "class": "express",
+      "arr": "11:00",
+      "dep": "11:15",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T210",
+      "class": "local",
+      "arr": "10:50",
+      "dep": "11:05",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T211",
+      "class": "premium",
+      "arr": "11:20",
+      "dep": "11:35",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T212",
+      "class": "local",
+      "arr": "11:40",
+      "dep": "11:55",
+      "required_platform": null,
+      "platform": "P4"
+    }
+  ],
+  "now": "09:00",
+  "delays": [],
+  "closures": [
+    {
+      "id": "C1",
+      "platform": "P2",
+      "start": "10:00",
+      "end": "11:30"
+    }
+  ]
+}

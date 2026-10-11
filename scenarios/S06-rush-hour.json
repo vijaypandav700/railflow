@@ -1,0 +1,75 @@
+{
+  "id": "S06-rush-hour",
+  "station": {
+    "name": "Vortexa Junction",
+    "gap": 5,
+    "platforms": [
+      "P1",
+      "P2",
+      "P3"
+    ],
+    "defaults": {
+      "dwell_min": 2,
+      "max_hold": 120,
+      "closure_buffer": 5
+    }
+  },
+  "trains": [
+    {
+      "id": "T301",
+      "class": "express",
+      "arr": "09:00",
+      "dep": "09:10",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T302",
+      "class": "local",
+      "arr": "09:05",
+      "dep": "09:15",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T303",
+      "class": "local",
+      "arr": "09:10",
+      "dep": "09:20",
+      "required_platform": null,
+      "platform": "P3"
+    },
+    {
+      "id": "T304",
+      "class": "local",
+      "arr": "09:20",
+      "dep": "09:30",
+      "required_platform": null,
+      "platform": "P1"
+    },
+    {
+      "id": "T305",
+      "class": "premium",
+      "arr": "09:25",
+      "dep": "09:35",
+      "required_platform": null,
+      "platform": "P2"
+    },
+    {
+      "id": "T306",
+      "class": "express",
+      "arr": "09:30",
+      "dep": "09:40",
+      "required_platform": null,
+      "platform": "P3"
+    }
+  ],
+  "now": "08:55",
+  "delays": [
+    {
+      "train_id": "T301",
+      "minutes": 15
+    }
+  ],
+  "closures": []
+}

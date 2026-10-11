@@ -86,6 +86,28 @@ class Train(BaseModel):
         return self
 
 
+class Delay(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    train_id: str = Field(min_length=1)
+    minutes: int = Field(ge=1, le=HORIZON)
+
+
+class Closure(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    id: str = Field(min_length=1)
+    platform: str = Field(min_length=1)
+    start: Minutes
+    end: Minutes
+
+    @model_validator(mode="after")
+    def _start_before_end(self) -> Self:
+        if self.start >= self.end:
+            raise ValueError(f"closure {self.id}: start must be before end")
+        return self
+
+
 class Scenario(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -93,6 +115,8 @@ class Scenario(BaseModel):
     station: Station
     trains: list[Train] = Field(max_length=MAX_TRAINS)
     now: Minutes = 0
+    delays: list[Delay] = Field(default_factory=list)
+    closures: list[Closure] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def _check_references(self) -> Self:
@@ -110,4 +134,16 @@ class Scenario(BaseModel):
                     raise ValueError(
                         f"train {train.id}: unknown platform {value!r} in field {label}"
                     )
+        for delay in self.delays:
+            if delay.train_id not in seen:
+                raise ValueError(f"delay refers to unknown train {delay.train_id!r}")
+        closure_ids: set[str] = set()
+        for closure in self.closures:
+            if closure.id in closure_ids:
+                raise ValueError(f"duplicate closure id {closure.id!r}")
+            closure_ids.add(closure.id)
+            if closure.platform not in known:
+                raise ValueError(
+                    f"closure {closure.id}: unknown platform {closure.platform!r}"
+                )
         return self
