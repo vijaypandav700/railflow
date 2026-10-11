@@ -1,10 +1,11 @@
 import os
 import time
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from fastapi import FastAPI, HTTPException
 from railflow import __version__
+from railflow.audit import AuditLog
 from railflow.benchmark import compare
 from railflow.detector import detect
 from railflow.insights import build_cascade, build_facts, compute_metrics
@@ -13,6 +14,36 @@ from railflow.reasons import replan_with_diff
 from railflow.validator import validate
 
 app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json", title="RailFlow API")
+audit = AuditLog(os.environ.get("RAILFLOW_AUDIT_DB", ":memory:"))
+CLIENT_EVENTS = ("PARSE", "CONFIRM", "REJECT", "REFUSED")
+MAX_EVENT_BYTES = 10_000
+
+
+@app.post("/api/audit/event")
+def audit_event(body: dict[str, Any]) -> dict[str, Any]:
+    kind = str(body.get("type", ""))
+    raw = body.get("payload", {})
+    if kind not in CLIENT_EVENTS or not isinstance(raw, dict):
+        raise HTTPException(
+            status_code=422,
+            detail={"code": "INPUT_MALFORMED", "message": f"type must be one of {CLIENT_EVENTS}"},
+        )
+    payload = cast(dict[str, Any], raw)
+    if len(repr(payload)) > MAX_EVENT_BYTES:
+        raise HTTPException(
+            status_code=422, detail={"code": "LIMIT_EXCEEDED", "message": "payload too large"}
+        )
+    return audit.append(kind, payload)
+
+
+@app.get("/api/audit")
+def audit_list(limit: int = 200) -> dict[str, Any]:
+    return {"entries": audit.entries(min(max(limit, 1), 500))}
+
+
+@app.get("/api/audit/verify")
+def audit_verify() -> dict[str, Any]:
+    return audit.verify()
 
 
 @app.get("/api/health")
@@ -64,6 +95,7 @@ def api_replan(body: dict[str, Any]) -> dict[str, Any]:
             status_code=422, detail={"code": "INPUT_MALFORMED", "message": str(exc)}
         ) from exc
     if not solved:
+        audit.append("REFUSED", {"reason": "INPUT_INFEASIBLE", "now": body.get("now")})
         raise HTTPException(
             status_code=422,
             detail={
@@ -107,6 +139,16 @@ def api_replan(body: dict[str, Any]) -> dict[str, Any]:
             "validation": validation,
         }
         (good if validation["valid"] else bad).append(alt)
+    audit.append(
+        "REPLAN",
+        {
+            "now": body.get("now"),
+            "trains": len(body["trains"]),
+            "profiles": [a["profile"] for a in good],
+            "valid": len(good),
+            "rejected": len(bad),
+        },
+    )
     return {"alternatives": good, "rejected_plans": bad}
 
 
