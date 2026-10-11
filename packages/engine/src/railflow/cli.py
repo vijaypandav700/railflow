@@ -8,6 +8,7 @@ from pathlib import Path
 from railflow import __version__
 from railflow.detector import detect
 from railflow.planfile import PlanFileError, load_plan_file
+from railflow.solver import assign
 from railflow.validator import Json, validate
 
 
@@ -34,6 +35,8 @@ def main(argv: list[str] | None = None) -> int:
     detect_cmd = commands.add_parser("detect", help="list conflicts in a plan file")
     detect_cmd.add_argument("file", type=Path)
     detect_cmd.add_argument("--json", action="store_true", dest="as_json")
+    assign_cmd = commands.add_parser("assign", help="solve a platform plan")
+    assign_cmd.add_argument("file", type=Path)
     args = parser.parse_args(argv)
 
     try:
@@ -41,6 +44,20 @@ def main(argv: list[str] | None = None) -> int:
     except PlanFileError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
+    if args.command == "assign":
+        out = assign(data)
+        print(f"status {out['status']}")
+        for r in out["plan"]:
+            print(f"{r['train_id']:<8}{r['platform']:<5}{r['arr']:>5}{r['dep']:>5}")
+        for u in out["unscheduled"]:
+            print(f"{u['train_id']:<8}UNSCHEDULED {u['reason']}")
+        for c in out["conflicts"]:
+            print(f"INFEASIBLE {', '.join(c['trains'])} on {c['platform']}")
+        if out["status"] not in ("OPTIMAL", "FEASIBLE"):
+            return 1
+        check = validate({**data, "plan": out["plan"], "unscheduled": out["unscheduled"]})
+        print("VALID" if check["valid"] else "INVALID")
+        return 0 if check["valid"] else 1
     if args.command == "detect":
         conflicts = detect(data)
         if args.as_json:
