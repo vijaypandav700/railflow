@@ -1,0 +1,532 @@
+{
+  "S01-clean-day": {
+    "baselines": {
+      "first_fit": {
+        "metrics": {
+          "delayed": 0,
+          "max_delay": 0,
+          "moved": 10,
+          "total_delay": 0,
+          "unscheduled": 0,
+          "weighted_delay": 0
+        },
+        "valid": true
+      },
+      "push_later": {
+        "metrics": {
+          "delayed": 0,
+          "max_delay": 0,
+          "moved": 0,
+          "total_delay": 0,
+          "unscheduled": 0,
+          "weighted_delay": 0
+        },
+        "valid": true
+      }
+    },
+    "ours": {
+      "min_change": {
+        "metrics": {
+          "delayed": 0,
+          "max_delay": 0,
+          "moved": 0,
+          "total_delay": 0,
+          "unscheduled": 0,
+          "weighted_delay": 0
+        },
+        "status": "OPTIMAL",
+        "time_ms": 11
+      },
+      "min_delay": {
+        "metrics": {
+          "delayed": 0,
+          "max_delay": 0,
+          "moved": 0,
+          "total_delay": 0,
+          "unscheduled": 0,
+          "weighted_delay": 0
+        },
+        "status": "OPTIMAL",
+        "time_ms": 9
+      }
+    },
+    "ours_beats_or_ties": true
+  },
+  "S03-single-delay": {
+    "baselines": {
+      "first_fit": {
+        "metrics": {
+          "delayed": 1,
+          "max_delay": 25,
+          "moved": 10,
+          "total_delay": 25,
+          "unscheduled": 0,
+          "weighted_delay": 75
+        },
+        "valid": true
+      },
+      "push_later": {
+        "metrics": {
+          "delayed": 2,
+          "max_delay": 40,
+          "moved": 0,
+          "total_delay": 47,
+          "unscheduled": 0,
+          "weighted_delay": 127
+        },
+        "valid": true
+      }
+    },
+    "ours": {
+      "min_change": {
+        "metrics": {
+          "delayed": 2,
+          "max_delay": 25,
+          "moved": 0,
+          "total_delay": 37,
+          "unscheduled": 0,
+          "weighted_delay": 87
+        },
+        "status": "OPTIMAL",
+        "time_ms": 10
+      },
+      "min_delay": {
+        "metrics": {
+          "delayed": 1,
+          "max_delay": 25,
+          "moved": 1,
+          "total_delay": 25,
+          "unscheduled": 0,
+          "weighted_delay": 75
+        },
+        "status": "OPTIMAL",
+        "time_ms": 16
+      }
+    },
+    "ours_beats_or_ties": true
+  },
+  "S04-midday-closure": {
+    "baselines": {
+      "first_fit": {
+        "metrics": {
+          "delayed": 0,
+          "max_delay": 0,
+          "moved": 8,
+          "total_delay": 0,
+          "unscheduled": 0,
+          "weighted_delay": 0
+        },
+        "valid": true
+      },
+      "push_later": {
+        "metrics": {
+          "delayed": 2,
+          "max_delay": 75,
+          "moved": 0,
+          "total_delay": 122,
+          "unscheduled": 0,
+          "weighted_delay": 272
+        },
+        "valid": true
+      }
+    },
+    "ours": {
+      "min_change": {
+        "metrics": {
+          "delayed": 1,
+          "max_delay": 40,
+          "moved": 1,
+          "total_delay": 40,
+          "unscheduled": 0,
+          "weighted_delay": 40
+        },
+        "status": "OPTIMAL",
+        "time_ms": 11
+      },
+      "min_delay": {
+        "metrics": {
+          "delayed": 0,
+          "max_delay": 0,
+          "moved": 3,
+          "total_delay": 0,
+          "unscheduled": 0,
+          "weighted_delay": 0
+        },
+        "status": "OPTIMAL",
+        "time_ms": 10
+      }
+    },
+    "ours_beats_or_ties": true
+  },
+  "S05-delay-plus-closure": {
+    "baselines": {
+      "first_fit": {
+        "metrics": {
+          "delayed": 1,
+          "max_delay": 25,
+          "moved": 8,
+          "total_delay": 25,
+          "unscheduled": 0,
+          "weighted_delay": 75
+        },
+        "valid": true
+      },
+      "push_later": {
+        "metrics": {
+          "delayed": 3,
+          "max_delay": 75,
+          "moved": 0,
+          "total_delay": 122,
+          "unscheduled": 0,
+          "weighted_delay": 352
+        },
+        "valid": true
+      }
+    },
+    "ours": {
+      "min_change": {
+        "metrics": {
+          "delayed": 2,
+          "max_delay": 25,
+          "moved": 1,
+          "total_delay": 37,
+          "unscheduled": 0,
+          "weighted_delay": 87
+        },
+        "status": "OPTIMAL",
+        "time_ms": 11
+      },
+      "min_delay": {
+        "metrics": {
+          "delayed": 1,
+          "max_delay": 25,
+          "moved": 2,
+          "total_delay": 25,
+          "unscheduled": 0,
+          "weighted_delay": 75
+        },
+        "status": "OPTIMAL",
+        "time_ms": 10
+      }
+    },
+    "ours_beats_or_ties": true
+  },
+  "S06-rush-hour": {
+    "baselines": {
+      "first_fit": {
+        "metrics": {
+          "delayed": 1,
+          "max_delay": 15,
+          "moved": 3,
+          "total_delay": 15,
+          "unscheduled": 0,
+          "weighted_delay": 45
+        },
+        "valid": true
+      },
+      "push_later": {
+        "metrics": {
+          "delayed": 2,
+          "max_delay": 15,
+          "moved": 0,
+          "total_delay": 17,
+          "unscheduled": 0,
+          "weighted_delay": 47
+        },
+        "valid": true
+      }
+    },
+    "ours": {
+      "min_change": {
+        "metrics": {
+          "delayed": 2,
+          "max_delay": 15,
+          "moved": 0,
+          "total_delay": 17,
+          "unscheduled": 0,
+          "weighted_delay": 47
+        },
+        "status": "OPTIMAL",
+        "time_ms": 4
+      },
+      "min_delay": {
+        "metrics": {
+          "delayed": 1,
+          "max_delay": 15,
+          "moved": 2,
+          "total_delay": 15,
+          "unscheduled": 0,
+          "weighted_delay": 45
+        },
+        "status": "OPTIMAL",
+        "time_ms": 4
+      }
+    },
+    "ours_beats_or_ties": true
+  },
+  "S08-capacity-exceeded": {
+    "baselines": {
+      "first_fit": {
+        "metrics": {
+          "delayed": 5,
+          "max_delay": 38,
+          "moved": 5,
+          "total_delay": 140,
+          "unscheduled": 0,
+          "weighted_delay": 140
+        },
+        "valid": true
+      },
+      "push_later": {
+        "metrics": {
+          "delayed": 5,
+          "max_delay": 98,
+          "moved": 0,
+          "total_delay": 480,
+          "unscheduled": 0,
+          "weighted_delay": 480
+        },
+        "valid": true
+      }
+    },
+    "ours": {
+      "min_change": {
+        "metrics": {
+          "delayed": 5,
+          "max_delay": 38,
+          "moved": 5,
+          "total_delay": 140,
+          "unscheduled": 0,
+          "weighted_delay": 140
+        },
+        "status": "OPTIMAL",
+        "time_ms": 215
+      },
+      "min_delay": {
+        "metrics": {
+          "delayed": 5,
+          "max_delay": 38,
+          "moved": 5,
+          "total_delay": 140,
+          "unscheduled": 0,
+          "weighted_delay": 140
+        },
+        "status": "OPTIMAL",
+        "time_ms": 227
+      }
+    },
+    "ours_beats_or_ties": true
+  },
+  "S09-replan-midday": {
+    "baselines": {
+      "first_fit": {
+        "metrics": {
+          "delayed": 1,
+          "max_delay": 15,
+          "moved": 2,
+          "total_delay": 15,
+          "unscheduled": 0,
+          "weighted_delay": 15
+        },
+        "valid": true
+      },
+      "push_later": {
+        "metrics": {
+          "delayed": 2,
+          "max_delay": 15,
+          "moved": 0,
+          "total_delay": 20,
+          "unscheduled": 0,
+          "weighted_delay": 20
+        },
+        "valid": true
+      }
+    },
+    "ours": {
+      "min_change": {
+        "metrics": {
+          "delayed": 2,
+          "max_delay": 15,
+          "moved": 0,
+          "total_delay": 20,
+          "unscheduled": 0,
+          "weighted_delay": 20
+        },
+        "status": "OPTIMAL",
+        "time_ms": 4
+      },
+      "min_delay": {
+        "metrics": {
+          "delayed": 1,
+          "max_delay": 15,
+          "moved": 1,
+          "total_delay": 15,
+          "unscheduled": 0,
+          "weighted_delay": 15
+        },
+        "status": "OPTIMAL",
+        "time_ms": 3
+      }
+    },
+    "ours_beats_or_ties": true
+  },
+  "S10-past-midnight": {
+    "baselines": {
+      "first_fit": {
+        "metrics": {
+          "delayed": 0,
+          "max_delay": 0,
+          "moved": 1,
+          "total_delay": 0,
+          "unscheduled": 0,
+          "weighted_delay": 0
+        },
+        "valid": true
+      },
+      "push_later": {
+        "metrics": {
+          "delayed": 0,
+          "max_delay": 0,
+          "moved": 0,
+          "total_delay": 0,
+          "unscheduled": 0,
+          "weighted_delay": 0
+        },
+        "valid": true
+      }
+    },
+    "ours": {
+      "min_change": {
+        "metrics": {
+          "delayed": 0,
+          "max_delay": 0,
+          "moved": 0,
+          "total_delay": 0,
+          "unscheduled": 0,
+          "weighted_delay": 0
+        },
+        "status": "OPTIMAL",
+        "time_ms": 4
+      },
+      "min_delay": {
+        "metrics": {
+          "delayed": 0,
+          "max_delay": 0,
+          "moved": 0,
+          "total_delay": 0,
+          "unscheduled": 0,
+          "weighted_delay": 0
+        },
+        "status": "OPTIMAL",
+        "time_ms": 3
+      }
+    },
+    "ours_beats_or_ties": true
+  },
+  "S11-closure-under-train": {
+    "baselines": {
+      "first_fit": {
+        "metrics": {
+          "delayed": 0,
+          "max_delay": 0,
+          "moved": 1,
+          "total_delay": 0,
+          "unscheduled": 0,
+          "weighted_delay": 0
+        },
+        "valid": true
+      },
+      "push_later": {
+        "metrics": {
+          "delayed": 1,
+          "max_delay": 60,
+          "moved": 0,
+          "total_delay": 60,
+          "unscheduled": 0,
+          "weighted_delay": 60
+        },
+        "valid": true
+      }
+    },
+    "ours": {
+      "min_change": {
+        "metrics": {
+          "delayed": 0,
+          "max_delay": 0,
+          "moved": 1,
+          "total_delay": 0,
+          "unscheduled": 0,
+          "weighted_delay": 0
+        },
+        "status": "OPTIMAL",
+        "time_ms": 1
+      },
+      "min_delay": {
+        "metrics": {
+          "delayed": 0,
+          "max_delay": 0,
+          "moved": 1,
+          "total_delay": 0,
+          "unscheduled": 0,
+          "weighted_delay": 0
+        },
+        "status": "OPTIMAL",
+        "time_ms": 2
+      }
+    },
+    "ours_beats_or_ties": true
+  },
+  "S12-large-day": {
+    "baselines": {
+      "first_fit": {
+        "metrics": {
+          "delayed": 1,
+          "max_delay": 5,
+          "moved": 49,
+          "total_delay": 5,
+          "unscheduled": 0,
+          "weighted_delay": 5
+        },
+        "valid": true
+      },
+      "push_later": {
+        "metrics": {
+          "delayed": 16,
+          "max_delay": 17,
+          "moved": 0,
+          "total_delay": 163,
+          "unscheduled": 0,
+          "weighted_delay": 361
+        },
+        "valid": true
+      }
+    },
+    "ours": {
+      "min_change": {
+        "metrics": {
+          "delayed": 15,
+          "max_delay": 28,
+          "moved": 0,
+          "total_delay": 180,
+          "unscheduled": 0,
+          "weighted_delay": 318
+        },
+        "status": "FEASIBLE",
+        "time_ms": 5012
+      },
+      "min_delay": {
+        "metrics": {
+          "delayed": 1,
+          "max_delay": 5,
+          "moved": 14,
+          "total_delay": 5,
+          "unscheduled": 0,
+          "weighted_delay": 5
+        },
+        "status": "FEASIBLE",
+        "time_ms": 5011
+      }
+    },
+    "ours_beats_or_ties": true
+  }
+}
