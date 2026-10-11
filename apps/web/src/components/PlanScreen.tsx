@@ -1,27 +1,9 @@
 import { validate } from "@railflow/validator";
 import { useEffect, useMemo, useState } from "react";
 import type { createApi } from "../api/client";
+import { DisruptPanel } from "./DisruptPanel";
 import { Gantt } from "./Gantt";
-
-type Scenario = {
-	station: {
-		gap: number;
-		platforms: string[];
-		dwell_min: number;
-		max_hold: number;
-		closure_buffer?: number | null;
-	};
-	trains: {
-		id: string;
-		arr: number;
-		dep: number;
-		platform?: string | null;
-		required_platform?: string | null;
-	}[];
-	closures: { id: string; platform: string; start: number; end: number }[];
-	delays: { train_id: string; minutes: number }[];
-	now: number;
-};
+import type { Scenario } from "./types";
 
 type Props = { api: ReturnType<typeof createApi> };
 
@@ -122,6 +104,7 @@ export function PlanScreen({ api }: Props) {
 							</li>
 						))}
 					</ul>
+					<DisruptPanel key={selected} api={api} scenario={scenario} />
 				</>
 			) : null}
 		</section>
